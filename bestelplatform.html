@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AK Schoonmaak – Bestelplatform</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f2f0;
+    --surface: #ffffff;
+    --surface2: #f7f9f7;
+    --border: #e2e6e2;
+    --accent: #1a6e3c;
+    --accent-light: #e8f5ee;
+    --accent2: #2d9e5f;
+    --text: #1a1f1a;
+    --text2: #4a584a;
+    --text3: #7a8a7a;
+    --danger: #c0392b;
+    --badge: #fff3cd;
+    --badge-text: #856404;
+    --shadow: 0 2px 12px rgba(26,110,60,0.08);
+    --shadow-lg: 0 8px 32px rgba(26,110,60,0.14);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(26,110,60,0.25);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    gap: 16px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+  .logo-sub { font-size: 11px; opacity: 0.75; font-weight: 400; margin-top: 1px; }
+
+  .header-search {
+    flex: 1;
+    max-width: 380px;
+    position: relative;
+  }
+  .header-search input {
+    width: 100%;
+    padding: 10px 16px 10px 40px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .header-search input::placeholder { color: rgba(255,255,255,0.6); }
+  .header-search input:focus { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.22); }
+  .search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 15px; opacity: 0.7; pointer-events: none;
+  }
+
+  .cart-btn {
+    position: relative;
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    color: white;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .cart-btn:hover { background: rgba(255,255,255,0.25); }
+  .cart-count {
+    background: #f0c040;
+    color: #1a1a00;
+    border-radius: 20px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  /* MAIN */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+  }
+
+  /* CATEGORIES */
+  .categories {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .cat-btn {
+    padding: 7px 16px;
+    border-radius: 24px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .cat-btn:hover { border-color: var(--accent2); color: var(--accent); }
+  .cat-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  /* GRID */
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text3);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .product-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+    cursor: default;
+  }
+  .product-card:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: #c5d9c5;
+    transform: translateY(-2px);
+  }
+
+  .product-icon {
+    width: 52px; height: 52px;
+    background: var(--accent-light);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+
+  .product-nr {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text3);
+    background: var(--surface2);
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 5px;
+    width: fit-content;
+  }
+
+  .product-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .product-use {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .product-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .unit-badge {
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 9px;
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  .qty-control {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .qty-btn {
+    width: 32px; height: 32px;
+    border: none;
+    background: var(--surface2);
+    color: var(--accent);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .qty-btn:hover { background: var(--accent-light); }
+  .qty-display {
+    width: 36px;
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-left: 1.5px solid var(--border);
+    border-right: 1.5px solid var(--border);
+    padding: 0;
+    height: 32px;
+    color: var(--text);
+    background: white;
+  }
+  .qty-display:focus { outline: none; }
+
+  .add-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 9px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, transform 0.1s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .add-btn:hover { background: var(--accent2); }
+  .add-btn:active { transform: scale(0.98); }
+  .add-btn.added { background: #2e7d32; }
+
+  .product-card.hidden { display: none; }
+
+  /* CART PANEL */
+  .cart-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .cart-overlay.open { display: block; opacity: 1; }
+
+  .cart-panel {
+    position: fixed;
+    right: 0; top: 0; bottom: 0;
+    width: 420px;
+    max-width: 100vw;
+    background: var(--surface);
+    z-index: 201;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.18);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .cart-panel.open { transform: translateX(0); }
+
+  .cart-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-header h2 { font-size: 18px; font-weight: 700; }
+  .close-cart {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text2);
+    transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .close-cart:hover { background: var(--surface2); }
+
+  .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cart-empty {
+    text-align: center;
+    padding: 60px 0;
+    color: var(--text3);
+  }
+  .cart-empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .cart-empty p { font-size: 14px; }
+
+  .cart-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px;
+    background: var(--surface2);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .cart-item-icon { font-size: 22px; flex-shrink: 0; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 14px; font-weight: 600; }
+  .cart-item-qty { font-size: 12px; color: var(--text2); margin-top: 3px; }
+  .cart-item-remove {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 16px;
+    transition: color 0.15s;
+    flex-shrink: 0;
+    padding: 2px;
+  }
+  .cart-item-remove:hover { color: var(--danger); }
+
+  .cart-footer {
+    padding: 20px 24px;
+    border-top: 1.5px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .name-input-wrap label {
+    font-size: 13px; font-weight: 600; color: var(--text2);
+    display: block; margin-bottom: 6px;
+  }
+  .name-input-wrap input {
+    width: 100%;
+    padding: 11px 14px;
+    border-radius: 9px;
+    border: 1.5px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--surface);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .name-input-wrap input:focus { border-color: var(--accent); }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.18s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .submit-btn:hover { background: var(--accent2); }
+  .submit-btn:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; }
+
+  /* SUCCESS */
+  .success-screen {
+    display: none;
+    position: fixed; inset: 0;
+    background: white;
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 40px;
+    gap: 16px;
+  }
+  .success-screen.show { display: flex; }
+  .success-icon { font-size: 72px; }
+  .success-screen h2 { font-size: 26px; font-weight: 700; color: var(--accent); }
+  .success-screen p { color: var(--text2); font-size: 16px; max-width: 340px; line-height: 1.6; }
+  .success-back {
+    margin-top: 8px;
+    padding: 13px 28px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .success-back:hover { background: var(--accent2); }
+
+  /* ORDER LOG */
+  .orders-section {
+    margin-top: 40px;
+  }
+  .orders-table-wrap {
+    overflow-x: auto;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: var(--surface2);
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 1.5px solid var(--border);
+  }
+  td {
+    padding: 13px 16px;
+    font-size: 13px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+  .status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    background: #d4edda;
+    color: #155724;
+  }
+  .no-orders { text-align: center; padding: 30px; color: var(--text3); font-size: 14px; }
+
+  @media (max-width: 600px) {
+    .header-inner { gap: 10px; }
+    .logo-sub { display: none; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .cart-panel { width: 100vw; }
+  }
+  @media (max-width: 400px) {
+    .products-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🧹</div>
+      <div>
+        <div class="logo-text">AK Schoonmaak</div>
+        <div class="logo-sub">Bestelplatform materialen</div>
+      </div>
+    </div>
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Zoek product…" oninput="filterProducts()">
+    </div>
+    <button class="cart-btn" onclick="openCart()">
+      🛒 Bestelling
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <div class="categories" id="categories">
+    <button class="cat-btn active" onclick="setCategory('all', this)">Alles</button>
+    <button class="cat-btn" onclick="setCategory('reinigers', this)">🧴 Reinigers</button>
+    <button class="cat-btn" onclick="setCategory('doeken', this)">🧻 Doeken & Sponzen</button>
+    <button class="cat-btn" onclick="setCategory('mops', this)">🫧 Mops & Vloer</button>
+    <button class="cat-btn" onclick="setCategory('gereedschap', this)">🪣 Gereedschap</button>
+    <button class="cat-btn" onclick="setCategory('veiligheid', this)">🦺 Veiligheid</button>
+    <button class="cat-btn" onclick="setCategory('afval', this)">🗑️ Afvalzakken</button>
+    <button class="cat-btn" onclick="setCategory('stelen', this)">🔧 Stelen & Accessoires</button>
+  </div>
+
+  <div class="section-title" id="sectionTitle">Alle producten (36)</div>
+  <div class="products-grid" id="productsGrid"></div>
+
+  <div class="orders-section" id="ordersSection">
+    <div class="section-title">Ingediende bestellingen</div>
+    <div class="orders-table-wrap">
+      <table id="ordersTable">
+        <thead>
+          <tr>
+            <th>Tijdstip</th>
+            <th>Medewerker</th>
+            <th>Producten</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody">
+          <tr><td colspan="4" class="no-orders">Nog geen bestellingen</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- Cart Panel -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>🛒 Uw bestelling</h2>
+    <button class="close-cart" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <div class="empty-icon">🧹</div>
+      <p>Voeg producten toe aan uw bestelling</p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="name-input-wrap">
+      <label for="employeeName">Uw naam</label>
+      <input type="text" id="employeeName" placeholder="Bijv. Jan de Vries">
+    </div>
+    <button class="submit-btn" id="submitBtn" onclick="submitOrder()" disabled>
+      ✅ Bestelling plaatsen
+    </button>
+  </div>
+</div>
+
+<!-- Success screen -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✅</div>
+  <h2>Bestelling ontvangen!</h2>
+  <p id="successMsg">Uw bestelling is succesvol ingediend. De verantwoordelijke wordt op de hoogte gesteld.</p>
+  <button class="success-back" onclick="backToShop()">← Terug naar overzicht</button>
+</div>
+
+<script>
+const products = [
+  { id:1,  name:"Sanitairreiniger",      cat:"reinigers",    icon:"🚽", use:"Reinigen van sanitair oppervlaktes",          unit:"1L flessen",     how:"Verdunnen met water, rode doek" },
+  { id:2,  name:"Interieurreiniger",     cat:"reinigers",    icon:"🪟", use:"Reinigen van interieur oppervlaktes",         unit:"1L flessen",     how:"Verdunnen, blauwe doek" },
+  { id:3,  name:"Vloerreiniger",         cat:"reinigers",    icon:"🧽", use:"Reinigen van vloeren",                        unit:"1L flessen",     how:"Verdunnen, dweildoek" },
+  { id:4,  name:"Ontvetter",             cat:"reinigers",    icon:"🫧", use:"Verwijderen van vet op deuren/gootsteen",     unit:"1L flessen",     how:"Verdunnen, spons of blauwe doek" },
+  { id:5,  name:"Vlekkenspray",          cat:"reinigers",    icon:"💦", use:"Verwijderen van wateroplosbare vlekken",      unit:"0,5L flessen",   how:"Op vlek sprayen → inwerken → spons" },
+  { id:6,  name:"Blauwe doek",           cat:"doeken",       icon:"🟦", use:"Interieurdoek",                               unit:"Per stuk",       how:"Nat gebruiken op interieur" },
+  { id:7,  name:"Rode doek",             cat:"doeken",       icon:"🟥", use:"Sanitairdoek",                                unit:"Per stuk",       how:"Nat gebruiken op sanitair" },
+  { id:8,  name:"Spons",                 cat:"doeken",       icon:"🧽", use:"Handmatige reiniging",                        unit:"Per stuk",       how:"Nat maken + schrobben" },
+  { id:9,  name:"Glasdoek",              cat:"doeken",       icon:"🪟", use:"Glazen oppervlakken strepenvrij",             unit:"Per stuk",       how:"Droog gebruiken" },
+  { id:10, name:"Vloermop – glad",       cat:"mops",         icon:"🧹", use:"Dweilen gladde vloeren",                      unit:"Per stuk",       how:"Monteren + nat maken + uitwringen" },
+  { id:11, name:"Vloermop – ruw",        cat:"mops",         icon:"🧹", use:"Dweilen ruwe vloeren",                        unit:"Per stuk",       how:"Monteren + nat maken + uitwringen" },
+  { id:12, name:"Vloermop – extra ruw",  cat:"mops",         icon:"🧹", use:"Voor werkplaatsen/opleveringen",              unit:"Per stuk",       how:"Monteren + nat maken + uitwringen" },
+  { id:13, name:"Wisdoeken",             cat:"doeken",       icon:"🧻", use:"Wissen van stof/zand",                        unit:"Per stuk",       how:"Op wissteel zetten" },
+  { id:14, name:"Stofzuiger",            cat:"gereedschap",  icon:"🌀", use:"Verwijderen van stof/vuil",                   unit:"Per stuk",       how:"Juiste zuigmond kiezen" },
+  { id:15, name:"Moppenwagen",           cat:"gereedschap",  icon:"🪣", use:"Dweilen met schoon/vuil water gescheiden",    unit:"Per stuk",       how:"Blauwe (sop) + rode (spoel) emmer" },
+  { id:16, name:"Mini-duster",           cat:"gereedschap",  icon:"🪶", use:"Afstoffen van kleine oppervlakken",           unit:"Per stuk",       how:"In ronde beweging" },
+  { id:17, name:"Inwasser",              cat:"gereedschap",  icon:"🪣", use:"Ramen natmaken en reinigen",                  unit:"Per stuk",       how:"Sop aanbrengen, boven→beneden" },
+  { id:18, name:"Trekker",               cat:"gereedschap",  icon:"🔧", use:"Water van ramen afhalen",                     unit:"Per stuk",       how:"Boven→beneden trekken" },
+  { id:19, name:"Stoffer & blik",        cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                             unit:"Per stuk",       how:"Vuil bij elkaar vegen" },
+  { id:20, name:"Ragebol",               cat:"gereedschap",  icon:"🕷️", use:"Spinrag/hoge plekken",                        unit:"Per stuk",       how:"Op steel zetten" },
+  { id:21, name:"Bezem",                 cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                             unit:"Per stuk",       how:"Op steel zetten, droog vuil" },
+  { id:22, name:"Schoonmaakhandschoenen",cat:"veiligheid",   icon:"🧤", use:"Beschermen tegen chemie & viezigheid",        unit:"Doos 200 stuks", how:"Aantrekken bij nat/chemisch werk" },
+  { id:23, name:"Veiligheidsbril",       cat:"veiligheid",   icon:"🥽", use:"Bescherming tegen spatten",                   unit:"Per stuk",       how:"Opzetten bij chemie/machines" },
+  { id:24, name:"Afvalzak 80×110",       cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 15 rollen", how:"In prullenbak plaatsen" },
+  { id:25, name:"Pedaalemmerzak 58×100", cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 50 rollen", how:"In pedaalemmer plaatsen" },
+  { id:26, name:"Afvalzak 58×100",       cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 20 rollen", how:"In afvalemmer plaatsen" },
+  { id:27, name:"Biologische afvalzak",  cat:"afval",        icon:"♻️", use:"GFT afval verzamelen",                        unit:"Doos 24 rollen", how:"In GFT-emmer plaatsen" },
+  { id:28, name:"Aluminium steel",       cat:"stelen",       icon:"🔩", use:"Voor dweilonderstel",                         unit:"Per stuk",       how:"Oprollen, vastdraaien" },
+  { id:29, name:"Bezemsteel",            cat:"stelen",       icon:"🔧", use:"Voor bezemkop",                               unit:"Per stuk",       how:"Vastdraaien" },
+  { id:30, name:"Ergo-dweil",            cat:"mops",         icon:"🦾", use:"Minder belasting pols/schouder",              unit:"Per stuk",       how:"Bovenste + middelste handvat, S-beweging" },
+  { id:31, name:"Uitwringer",            cat:"gereedschap",  icon:"💧", use:"Doeken uitwringen zonder kracht",             unit:"Per stuk",       how:"Op kar plaatsen, doek door wringer" },
+  { id:32, name:"Steel stoffer & blik",  cat:"stelen",       icon:"🧹", use:"Staand vegen",                                unit:"Per stuk",       how:"Vuil in steel-blik vegen" },
+  { id:33, name:"Plumeau",               cat:"gereedschap",  icon:"🪶", use:"Stof verwijderen zonder bukken",              unit:"Per stuk",       how:"Statisch maken → gebruiken" },
+  { id:34, name:"Mini telescoopsteel",   cat:"stelen",       icon:"📏", use:"Bereik vergroten",                            unit:"Per stuk",       how:"Doek bevestigen en gebruiken" },
+  { id:35, name:"Ergo gebogen bezemsteel",cat:"stelen",      icon:"🔧", use:"Lichtere beweging bij vegen",                 unit:"Per stuk",       how:"Rechte rug, van je afvegen" },
+  { id:36, name:"Doodlebug",             cat:"mops",         icon:"🪥", use:"Hardnekkige vloer-vlekken verwijderen",       unit:"Per stuk",       how:"Aan telescoopsteel, nat maken en schrobben" },
+];
+
+let cart = {};
+let currentCategory = 'all';
+let currentSearch = '';
+let orders = JSON.parse(localStorage.getItem('ak_orders') || '[]');
+
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  let visible = 0;
+
+  products.forEach(p => {
+    const matchCat = currentCategory === 'all' || p.cat === currentCategory;
+    const matchSearch = p.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                        p.use.toLowerCase().includes(currentSearch.toLowerCase());
+    const show = matchCat && matchSearch;
+    if (show) visible++;
+
+    const qty = cart[p.id] || 0;
+    const card = document.createElement('div');
+    card.className = 'product-card' + (show ? '' : ' hidden');
+    card.id = 'card-' + p.id;
+    card.innerHTML = `
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <div class="product-icon">${p.icon}</div>
+        <div>
+          <div class="product-nr">Nr. ${p.id}</div>
+          <div class="product-name">${p.name}</div>
+        </div>
+      </div>
+      <div class="product-use">${p.use}</div>
+      <div class="product-meta">
+        <span class="unit-badge">📦 ${p.unit}</span>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+          <input class="qty-display" type="number" id="qty-${p.id}" value="${qty}" min="0" max="99" oninput="setQty(${p.id}, this.value)">
+          <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+        </div>
+      </div>
+      <button class="add-btn ${qty>0?'added':''}" id="addbtn-${p.id}" onclick="addToCart(${p.id})">
+        ${qty>0 ? '✅ Toegevoegd (' + qty + ')' : '+ Toevoegen'}
+      </button>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.getElementById('sectionTitle').textContent =
+    `${currentCategory === 'all' ? 'Alle producten' : currentCategory} (${visible})`;
+}
+
+function changeQty(id, delta) {
+  const input = document.getElementById('qty-' + id);
+  const newVal = Math.max(0, Math.min(99, (parseInt(input.value)||0) + delta));
+  input.value = newVal;
+  setQty(id, newVal);
+}
+
+function setQty(id, val) {
+  const n = Math.max(0, Math.min(99, parseInt(val)||0));
+  document.getElementById('qty-' + id).value = n;
+  if (n > 0) {
+    cart[id] = n;
+  } else {
+    delete cart[id];
+  }
+  updateAddBtn(id);
+  updateCartCount();
+}
+
+function updateAddBtn(id) {
+  const btn = document.getElementById('addbtn-' + id);
+  const qty = cart[id] || 0;
+  if (btn) {
+    btn.textContent = qty > 0 ? `✅ Toegevoegd (${qty})` : '+ Toevoegen';
+    btn.className = 'add-btn' + (qty>0?' added':'');
+  }
+}
+
+function addToCart(id) {
+  const input = document.getElementById('qty-' + id);
+  let n = parseInt(input.value) || 0;
+  if (n === 0) { n = 1; input.value = 1; }
+  cart[id] = n;
+  updateAddBtn(id);
+  updateCartCount();
+}
+
+function updateCartCount() {
+  const total = Object.values(cart).reduce((s,v) => s+v, 0);
+  document.getElementById('cartCount').textContent = total;
+  document.getElementById('submitBtn').disabled = total === 0 || !document.getElementById('employeeName').value.trim();
+}
+
+function setCategory(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function filterProducts() {
+  currentSearch = document.getElementById('searchInput').value;
+  renderProducts();
+}
+
+function openCart() {
+  renderCartPanel();
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartPanel').classList.add('open');
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartPanel').classList.remove('open');
+}
+
+function renderCartPanel() {
+  const container = document.getElementById('cartItems');
+  const ids = Object.keys(cart).filter(id => cart[id] > 0);
+  if (ids.length === 0) {
+    container.innerHTML = `<div class="cart-empty"><div class="empty-icon">🧹</div><p>Voeg producten toe aan uw bestelling</p></div>`;
+  } else {
+    container.innerHTML = ids.map(id => {
+      const p = products.find(x => x.id == id);
+      return `<div class="cart-item">
+        <div class="cart-item-icon">${p.icon}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${p.name}</div>
+          <div class="cart-item-qty">${cart[id]}× ${p.unit}</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${id})">✕</button>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('employeeName').oninput = updateCartCount;
+}
+
+function removeFromCart(id) {
+  delete cart[id];
+  const inp = document.getElementById('qty-' + id);
+  if (inp) inp.value = 0;
+  updateAddBtn(id);
+  updateCartCount();
+  renderCartPanel();
+}
+
+function submitOrder() {
+  const name = document.getElementById('employeeName').value.trim();
+  if (!name) { alert('Vul uw naam in.'); return; }
+  const ids = Object.keys(cart).filter(id => cart[id] > 0);
+  if (ids.length === 0) return;
+
+  const items = ids.map(id => {
+    const p = products.find(x => x.id == id);
+    return `${p.name} ×${cart[id]}`;
+  }).join(', ');
+
+  const order = {
+    time: new Date().toLocaleString('nl-NL'),
+    name,
+    items,
+    status: 'Ingediend'
+  };
+  orders.unshift(order);
+  localStorage.setItem('ak_orders', JSON.stringify(orders.slice(0, 50)));
+
+  document.getElementById('successMsg').textContent =
+    `Beste ${name}, uw bestelling is ontvangen. De verantwoordelijke wordt op de hoogte gesteld.`;
+  document.getElementById('successScreen').classList.add('show');
+  closeCart();
+
+  // Reset
+  cart = {};
+  Object.keys(cart).forEach(id => updateAddBtn(id));
+  products.forEach(p => {
+    const inp = document.getElementById('qty-' + p.id);
+    if (inp) inp.value = 0;
+    updateAddBtn(p.id);
+  });
+  updateCartCount();
+  renderOrders();
+}
+
+function backToShop() {
+  document.getElementById('successScreen').classList.remove('show');
+  renderProducts();
+}
+
+function renderOrders() {
+  const tbody = document.getElementById('ordersBody');
+  if (orders.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" class="no-orders">Nog geen bestellingen</td></tr>';
+    return;
+  }
+  tbody.innerHTML = orders.slice(0, 10).map(o => `
+    <tr>
+      <td><span style="font-family:DM Mono,monospace;font-size:12px">${o.time}</span></td>
+      <td><strong>${o.name}</strong></td>
+      <td style="max-width:300px;white-space:normal;line-height:1.4">${o.items}</td>
+      <td><span class="status-badge">✅ ${o.status}</span></td>
+    </tr>
+  `).join('');
+}
+
+// Init
+renderProducts();
+renderOrders();
+updateCartCount();
+</script>
+</body>
+</html>

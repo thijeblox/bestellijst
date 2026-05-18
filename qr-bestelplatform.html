@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR – AK Schoonmaak Bestelplatform</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f0f2f0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 36px;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(26,110,60,0.15);
+    max-width: 380px;
+    width: 100%;
+  }
+  .logo { font-size: 40px; margin-bottom: 8px; }
+  h1 { font-size: 22px; font-weight: 700; color: #1a1f1a; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #7a8a7a; margin-bottom: 28px; }
+  #qrcode {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  #qrcode canvas, #qrcode img {
+    border-radius: 12px;
+    border: 3px solid #e8f5ee;
+    padding: 8px;
+  }
+  .instructions {
+    background: #e8f5ee;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #1a6e3c;
+    font-weight: 500;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .url-box {
+    background: #f7f9f7;
+    border: 1.5px solid #e2e6e2;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #4a584a;
+    word-break: break-all;
+    font-family: monospace;
+    margin-bottom: 16px;
+  }
+  .note {
+    font-size: 12px;
+    color: #7a8a7a;
+    line-height: 1.6;
+  }
+  .print-btn {
+    margin-top: 16px;
+    padding: 12px 28px;
+    background: #1a6e3c;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  @media print {
+    body { background: white; }
+    .card { box-shadow: none; border: 2px solid #ccc; }
+    .print-btn { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">🧹</div>
+  <h1>AK Schoonmaak</h1>
+  <div class="subtitle">Scan voor het bestelplatform</div>
+
+  <div id="qrcode"></div>
+
+  <div class="instructions">
+    📱 Scan de QR-code met uw telefoon om producten te bestellen wanneer ze op zijn
+  </div>
+
+  <div class="url-box" id="urlDisplay">bestelplatform.html</div>
+
+  <div class="note">
+    💡 Tip: Druk deze QR-code af en hang hem op in de schoonmaakruimte, zodat medewerkers eenvoudig kunnen bestellen.
+  </div>
+
+  <button class="print-btn" onclick="window.print()">🖨️ Afdrukken</button>
+</div>
+
+<script>
+  // Generate QR code pointing to the platform file
+  // In practice this should be the hosted URL; here we show a demo URL
+  const platformUrl = window.location.href.replace('qr-bestelplatform.html', 'bestelplatform.html');
+  document.getElementById('urlDisplay').textContent = platformUrl;
+
+  new QRCode(document.getElementById("qrcode"), {
+    text: platformUrl,
+    width: 220,
+    height: 220,
+    colorDark : "#1a6e3c",
+    colorLight : "#ffffff",
+    correctLevel : QRCode.CorrectLevel.H
+  });
+</script>
+</body>
+</html>

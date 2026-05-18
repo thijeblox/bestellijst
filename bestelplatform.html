@@ -183,12 +183,20 @@
     transform: translateY(-2px);
   }
 
-  .product-icon {
-    width: 52px; height: 52px;
-    background: var(--accent-light);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px;
+  .product-image {
+    width: 100%;
+    height: 180px;
+    background: var(--surface2);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .product-nr {
@@ -591,42 +599,43 @@
 
 <script>
 const products = [
-  { id:1,  name:"Sanitairreiniger",      cat:"reinigers",    icon:"🚽", use:"Reinigen van sanitair oppervlaktes",          unit:"1L flessen",     how:"Verdunnen met water, rode doek" },
-  { id:2,  name:"Interieurreiniger",     cat:"reinigers",    icon:"🪟", use:"Reinigen van interieur oppervlaktes",         unit:"1L flessen",     how:"Verdunnen, blauwe doek" },
-  { id:3,  name:"Vloerreiniger",         cat:"reinigers",    icon:"🧽", use:"Reinigen van vloeren",                        unit:"1L flessen",     how:"Verdunnen, dweildoek" },
-  { id:4,  name:"Ontvetter",             cat:"reinigers",    icon:"🫧", use:"Verwijderen van vet op deuren/gootsteen",     unit:"1L flessen",     how:"Verdunnen, spons of blauwe doek" },
-  { id:5,  name:"Vlekkenspray",          cat:"reinigers",    icon:"💦", use:"Verwijderen van wateroplosbare vlekken",      unit:"0,5L flessen",   how:"Op vlek sprayen → inwerken → spons" },
-  { id:6,  name:"Blauwe doek",           cat:"doeken",       icon:"🟦", use:"Interieurdoek",                               unit:"Per stuk",       how:"Nat gebruiken op interieur" },
-  { id:7,  name:"Rode doek",             cat:"doeken",       icon:"🟥", use:"Sanitairdoek",                                unit:"Per stuk",       how:"Nat gebruiken op sanitair" },
-  { id:8,  name:"Spons",                 cat:"doeken",       icon:"🧽", use:"Handmatige reiniging",                        unit:"Per stuk",       how:"Nat maken + schrobben" },
-  { id:9,  name:"Glasdoek",              cat:"doeken",       icon:"🪟", use:"Glazen oppervlakken strepenvrij",             unit:"Per stuk",       how:"Droog gebruiken" },
-  { id:10, name:"Vloermop – glad",       cat:"mops",         icon:"🧹", use:"Dweilen gladde vloeren",                      unit:"Per stuk",       how:"Monteren + nat maken + uitwringen" },
-  { id:11, name:"Vloermop – ruw",        cat:"mops",         icon:"🧹", use:"Dweilen ruwe vloeren",                        unit:"Per stuk",       how:"Monteren + nat maken + uitwringen" },
-  { id:12, name:"Vloermop – extra ruw",  cat:"mops",         icon:"🧹", use:"Voor werkplaatsen/opleveringen",              unit:"Per stuk",       how:"Monteren + nat maken + uitwringen" },
-  { id:13, name:"Wisdoeken",             cat:"doeken",       icon:"🧻", use:"Wissen van stof/zand",                        unit:"Per stuk",       how:"Op wissteel zetten" },
-  { id:14, name:"Stofzuiger",            cat:"gereedschap",  icon:"🌀", use:"Verwijderen van stof/vuil",                   unit:"Per stuk",       how:"Juiste zuigmond kiezen" },
-  { id:15, name:"Moppenwagen",           cat:"gereedschap",  icon:"🪣", use:"Dweilen met schoon/vuil water gescheiden",    unit:"Per stuk",       how:"Blauwe (sop) + rode (spoel) emmer" },
-  { id:16, name:"Mini-duster",           cat:"gereedschap",  icon:"🪶", use:"Afstoffen van kleine oppervlakken",           unit:"Per stuk",       how:"In ronde beweging" },
-  { id:17, name:"Inwasser",              cat:"gereedschap",  icon:"🪣", use:"Ramen natmaken en reinigen",                  unit:"Per stuk",       how:"Sop aanbrengen, boven→beneden" },
-  { id:18, name:"Trekker",               cat:"gereedschap",  icon:"🔧", use:"Water van ramen afhalen",                     unit:"Per stuk",       how:"Boven→beneden trekken" },
-  { id:19, name:"Stoffer & blik",        cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                             unit:"Per stuk",       how:"Vuil bij elkaar vegen" },
-  { id:20, name:"Ragebol",               cat:"gereedschap",  icon:"🕷️", use:"Spinrag/hoge plekken",                        unit:"Per stuk",       how:"Op steel zetten" },
-  { id:21, name:"Bezem",                 cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                             unit:"Per stuk",       how:"Op steel zetten, droog vuil" },
-  { id:22, name:"Schoonmaakhandschoenen",cat:"veiligheid",   icon:"🧤", use:"Beschermen tegen chemie & viezigheid",        unit:"Doos 200 stuks", how:"Aantrekken bij nat/chemisch werk" },
-  { id:23, name:"Veiligheidsbril",       cat:"veiligheid",   icon:"🥽", use:"Bescherming tegen spatten",                   unit:"Per stuk",       how:"Opzetten bij chemie/machines" },
-  { id:24, name:"Afvalzak 80×110",       cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 15 rollen", how:"In prullenbak plaatsen" },
-  { id:25, name:"Pedaalemmerzak 58×100", cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 50 rollen", how:"In pedaalemmer plaatsen" },
-  { id:26, name:"Afvalzak 58×100",       cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 20 rollen", how:"In afvalemmer plaatsen" },
-  { id:27, name:"Biologische afvalzak",  cat:"afval",        icon:"♻️", use:"GFT afval verzamelen",                        unit:"Doos 24 rollen", how:"In GFT-emmer plaatsen" },
-  { id:28, name:"Aluminium steel",       cat:"stelen",       icon:"🔩", use:"Voor dweilonderstel",                         unit:"Per stuk",       how:"Oprollen, vastdraaien" },
-  { id:29, name:"Bezemsteel",            cat:"stelen",       icon:"🔧", use:"Voor bezemkop",                               unit:"Per stuk",       how:"Vastdraaien" },
-  { id:30, name:"Ergo-dweil",            cat:"mops",         icon:"🦾", use:"Minder belasting pols/schouder",              unit:"Per stuk",       how:"Bovenste + middelste handvat, S-beweging" },
-  { id:31, name:"Uitwringer",            cat:"gereedschap",  icon:"💧", use:"Doeken uitwringen zonder kracht",             unit:"Per stuk",       how:"Op kar plaatsen, doek door wringer" },
-  { id:32, name:"Steel stoffer & blik",  cat:"stelen",       icon:"🧹", use:"Staand vegen",                                unit:"Per stuk",       how:"Vuil in steel-blik vegen" },
-  { id:33, name:"Plumeau",               cat:"gereedschap",  icon:"🪶", use:"Stof verwijderen zonder bukken",              unit:"Per stuk",       how:"Statisch maken → gebruiken" },
-  { id:34, name:"Mini telescoopsteel",   cat:"stelen",       icon:"📏", use:"Bereik vergroten",                            unit:"Per stuk",       how:"Doek bevestigen en gebruiken" },
-  { id:35, name:"Ergo gebogen bezemsteel",cat:"stelen",      icon:"🔧", use:"Lichtere beweging bij vegen",                 unit:"Per stuk",       how:"Rechte rug, van je afvegen" },
-  { id:36, name:"Doodlebug",             cat:"mops",         icon:"🪥", use:"Hardnekkige vloer-vlekken verwijderen",       unit:"Per stuk",       how:"Aan telescoopsteel, nat maken en schrobben" },
+  { id:1,  name:"Sanitairreiniger",           cat:"reinigers",    icon:"🚽", use:"Reinigen van sanitair oppervlaktes",          unit:"1L flessen",     how:"Verdunnen met water, rode doek",                  image:"Dia4.JPG" },
+  { id:2,  name:"Interieurreiniger",          cat:"reinigers",    icon:"🪟", use:"Reinigen van interieur oppervlaktes",         unit:"1L flessen",     how:"Verdunnen, blauwe doek",                          image:"Dia5.JPG" },
+  { id:3,  name:"Vloerreiniger",              cat:"reinigers",    icon:"🧽", use:"Reinigen van vloeren",                        unit:"1L flessen",     how:"Verdunnen, dweildoek",                            image:"Dia6.JPG" },
+  { id:4,  name:"Ontvetter",                  cat:"reinigers",    icon:"🫧", use:"Verwijderen van vet op deuren/gootsteen",     unit:"1L flessen",     how:"Verdunnen, spons of blauwe doek",                 image:"Dia7.JPG" },
+  { id:5,  name:"Vlekkenspray",               cat:"reinigers",    icon:"💦", use:"Verwijderen van wateroplosbare vlekken",      unit:"0,5L flessen",   how:"Op vlek sprayen → inwerken → spons",              image:"Dia8.JPG" },
+  { id:6,  name:"RVS reiniger",               cat:"reinigers",    icon:"✨", use:"Reinigen en beschermen van RVS oppervlakten", unit:"0,5L flessen",   how:"Sproeien en polijsten met doek",                  image:"Dia9.JPG" },
+  { id:7,  name:"Blauwe doek",                cat:"doeken",       icon:"🟦", use:"Interieurdoek",                               unit:"Per stuk",       how:"Nat gebruiken op interieur",                      image:"Dia10.JPG" },
+  { id:8,  name:"Rode doek",                  cat:"doeken",       icon:"🟥", use:"Sanitairdoek",                                unit:"Per stuk",       how:"Nat gebruiken op sanitair",                       image:"Dia11.JPG" },
+  { id:9,  name:"Sponzen",                    cat:"doeken",       icon:"🧽", use:"Handmatige reiniging",                        unit:"Per stuk",       how:"Nat maken + schrobben",                           image:"Dia12.JPG" },
+  { id:10, name:"Glasdoek",                   cat:"doeken",       icon:"🪟", use:"Glazen oppervlakken strepenvrij",             unit:"Per stuk",       how:"Droog gebruiken",                                 image:"Dia13.JPG" },
+  { id:11, name:"Vloermop (gladde oppervlaktes)", cat:"mops",     icon:"🧹", use:"Dweilen gladde vloeren",                      unit:"Per stuk",       how:"Monteren + nat maken + uitwringen",               image:"Dia14.JPG" },
+  { id:12, name:"Vloermop (ruwe oppervlaktes)",   cat:"mops",     icon:"🧹", use:"Dweilen ruwe vloeren",                        unit:"Per stuk",       how:"Monteren + nat maken + uitwringen",               image:"Dia15.JPG" },
+  { id:13, name:"Vloermop (extra ruwe oppervlaktes/werkplaatsen)", cat:"mops", icon:"🧹", use:"Voor werkplaatsen/opleveringen", unit:"Per stuk", how:"Monteren + nat maken + uitwringen", image:"Dia16.JPG" },
+  { id:14, name:"Wisdoeken",                  cat:"doeken",       icon:"🧻", use:"Wissen van stof/zand",                        unit:"Per stuk",       how:"Op wissteel zetten",                              image:"Dia17.JPG" },
+  { id:15, name:"Stofzuiger",                 cat:"gereedschap",  icon:"🌀", use:"Verwijderen van stof/vuil",                   unit:"Per stuk",       how:"Juiste zuigmond kiezen",                          image:"Dia18.JPG" },
+  { id:16, name:"Moppenwagen",                cat:"gereedschap",  icon:"🪣", use:"Dweilen met schoon/vuil water gescheiden",    unit:"Per stuk",       how:"Blauwe (sop) + rode (spoel) emmer",               image:"Dia19.JPG" },
+  { id:17, name:"Mini-duster",                cat:"gereedschap",  icon:"🪶", use:"Afstoffen van kleine oppervlakken",           unit:"Per stuk",       how:"In ronde beweging",                               image:"Dia20.JPG" },
+  { id:18, name:"Inwasser",                   cat:"gereedschap",  icon:"🪣", use:"Ramen natmaken en reinigen",                  unit:"Per stuk",       how:"Sop aanbrengen, boven→beneden",                   image:"Dia21.JPG" },
+  { id:19, name:"Trekker",                    cat:"gereedschap",  icon:"🔧", use:"Water van ramen afhalen",                     unit:"Per stuk",       how:"Boven→beneden trekken",                           image:"Dia22.JPG" },
+  { id:20, name:"Stoffer & blik",             cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                             unit:"Per stuk",       how:"Vuil bij elkaar vegen",                           image:"Dia23.JPG" },
+  { id:21, name:"Ragebol",                    cat:"gereedschap",  icon:"🕷️", use:"Spinrag/hoge plekken",                        unit:"Per stuk",       how:"Op steel zetten",                                 image:"Dia24.JPG" },
+  { id:22, name:"Bezem",                      cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                             unit:"Per stuk",       how:"Op steel zetten, droog vuil",                     image:"Dia25.JPG" },
+  { id:23, name:"Schoonmaakhandschoenen",     cat:"veiligheid",   icon:"🧤", use:"Beschermen tegen chemie & viezigheid",        unit:"Doos 200 stuks", how:"Aantrekken bij nat/chemisch werk",               image:"Dia26.JPG" },
+  { id:24, name:"Veiligheidsbril",            cat:"veiligheid",   icon:"🥽", use:"Bescherming tegen spatten",                   unit:"Per stuk",       how:"Opzetten bij chemie/machines",                    image:"Dia27.JPG" },
+  { id:25, name:"Afvalzak (80×110)",          cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 15 rollen", how:"In prullenbak plaatsen",                         image:"Dia28.JPG" },
+  { id:26, name:"Pedaalemmerzakken (58×100)", cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 50 rollen", how:"In pedaalemmer plaatsen",                     image:"Dia29.JPG" },
+  { id:27, name:"Afvalzak (58×100)",          cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 20 rollen", how:"In afvalemmer plaatsen",                      image:"Dia30.JPG" },
+  { id:28, name:"Afvalzak biologisch (GFT)",  cat:"afval",        icon:"♻️", use:"GFT afval verzamelen",                        unit:"Doos 24 rollen", how:"In GFT-emmer plaatsen",                       image:"Dia31.JPG" },
+  { id:29, name:"Aluminium steel",            cat:"stelen",       icon:"🔩", use:"Voor dweilonderstel",                         unit:"Per stuk",       how:"Oprollen, vastdraaien",                           image:"Dia32.JPG" },
+  { id:30, name:"Bezemsteel",                 cat:"stelen",       icon:"🔧", use:"Voor bezemkop",                               unit:"Per stuk",       how:"Vastdraaien",                                     image:"Dia33.JPG" },
+  { id:31, name:"Ergo-dweil",                 cat:"mops",         icon:"🦾", use:"Minder belasting pols/schouder",              unit:"Per stuk",       how:"Bovenste + middelste handvat, S-beweging",        image:"Dia34.JPG" },
+  { id:32, name:"Uitwringer",                 cat:"gereedschap",  icon:"💧", use:"Doeken uitwringen zonder kracht",             unit:"Per stuk",       how:"Op kar plaatsen, doek door wringer",              image:"Dia35.JPG" },
+  { id:33, name:"Steel stoffer & blik",       cat:"stelen",       icon:"🧹", use:"Staand vegen",                                unit:"Per stuk",       how:"Vuil in steel-blik vegen",                        image:"Dia36.JPG" },
+  { id:34, name:"Plumeau",                    cat:"gereedschap",  icon:"🪶", use:"Stof verwijderen zonder bukken",              unit:"Per stuk",       how:"Statisch maken → gebruiken",                      image:"Dia37.JPG" },
+  { id:35, name:"Mini telescoopsteel",        cat:"stelen",       icon:"📏", use:"Bereik vergroten",                            unit:"Per stuk",       how:"Doek bevestigen en gebruiken",                    image:"Dia38.JPG" },
+  { id:36, name:"Ergo gebogen bezemsteel",    cat:"stelen",       icon:"🔧", use:"Lichtere beweging bij vegen",                 unit:"Per stuk",       how:"Rechte rug, van je afvegen",                      image:"Dia39.JPG" },
+  { id:37, name:"Doodlebug",                  cat:"mops",         icon:"🪥", use:"Hardnekkige vloer-vlekken verwijderen",       unit:"Per stuk",       how:"Aan telescoopsteel, nat maken en schrobben",      image:"Dia40.JPG" }
 ];
 
 let cart = {};
@@ -651,13 +660,11 @@ function renderProducts() {
     card.className = 'product-card' + (show ? '' : ' hidden');
     card.id = 'card-' + p.id;
     card.innerHTML = `
-      <div style="display:flex;align-items:flex-start;gap:12px;">
-        <div class="product-icon">${p.icon}</div>
-        <div>
-          <div class="product-nr">Nr. ${p.id}</div>
-          <div class="product-name">${p.name}</div>
-        </div>
+      <div class="product-image">
+        <img src="${p.image}" alt="${p.name}" onerror="this.style.display='none'">
       </div>
+      <div class="product-nr">Nr. ${p.id}</div>
+      <div class="product-name">${p.name}</div>
       <div class="product-use">${p.use}</div>
       <div class="product-meta">
         <span class="unit-badge">📦 ${p.unit}</span>

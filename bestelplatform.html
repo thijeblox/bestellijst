@@ -52,7 +52,8 @@
     align-items: center;
     justify-content: space-between;
     height: 68px;
-    gap: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
   .logo {
     display: flex;
@@ -72,8 +73,9 @@
 
   .header-search {
     flex: 1;
-    max-width: 380px;
+    min-width: 220px;
     position: relative;
+    order: 3;
   }
   .header-search input {
     width: 100%;
@@ -86,9 +88,14 @@
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s, background 0.2s;
+    z-index: 10;
   }
   .header-search input::placeholder { color: rgba(255,255,255,0.6); }
-  .header-search input:focus { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.22); }
+  .header-search input:focus { 
+    border-color: rgba(255,255,255,0.8); 
+    background: rgba(255,255,255,0.25);
+    z-index: 50;
+  }
   .search-icon {
     position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
     font-size: 15px; opacity: 0.7; pointer-events: none;
@@ -100,24 +107,25 @@
     border: 1.5px solid rgba(255,255,255,0.25);
     color: white;
     border-radius: 10px;
-    padding: 10px 18px;
+    padding: 10px 16px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: 6px;
     transition: background 0.2s;
     flex-shrink: 0;
+    white-space: nowrap;
   }
   .cart-btn:hover { background: rgba(255,255,255,0.25); }
   .cart-count {
     background: #f0c040;
     color: #1a1a00;
     border-radius: 20px;
-    padding: 1px 8px;
-    font-size: 12px;
+    padding: 1px 6px;
+    font-size: 11px;
     font-weight: 700;
-    min-width: 22px;
+    min-width: 20px;
     text-align: center;
   }
 
@@ -125,7 +133,7 @@
   main {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 28px 20px 80px;
+    padding: 20px 20px 80px;
   }
 
   /* CATEGORIES */
@@ -136,23 +144,24 @@
     margin-bottom: 24px;
   }
   .cat-btn {
-    padding: 7px 16px;
+    padding: 7px 14px;
     border-radius: 24px;
     border: 1.5px solid var(--border);
     background: var(--surface);
     color: var(--text2);
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.18s;
+    white-space: nowrap;
   }
   .cat-btn:hover { border-color: var(--accent2); color: var(--accent); }
   .cat-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
   /* GRID */
   .section-title {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--text3);
     letter-spacing: 0.8px;
@@ -162,18 +171,18 @@
 
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
   }
 
   .product-card {
     background: var(--surface);
     border-radius: var(--radius);
     border: 1.5px solid var(--border);
-    padding: 20px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
     cursor: default;
   }
@@ -185,9 +194,9 @@
 
   .product-image {
     width: 100%;
-    height: 180px;
+    height: 140px;
     background: var(--surface2);
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -201,7 +210,7 @@
 
   .product-nr {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text3);
     background: var(--surface2);
     display: inline-block;
@@ -211,16 +220,16 @@
   }
 
   .product-name {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--text);
     line-height: 1.3;
   }
 
   .product-use {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text2);
-    line-height: 1.5;
+    line-height: 1.4;
     flex: 1;
   }
 
@@ -228,15 +237,15 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
   }
   .unit-badge {
-    font-size: 11px;
+    font-size: 10px;
     background: var(--surface2);
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 3px 9px;
+    border-radius: 4px;
+    padding: 2px 7px;
     color: var(--text2);
     font-weight: 500;
   }
@@ -246,15 +255,15 @@
     align-items: center;
     gap: 0;
     border: 1.5px solid var(--border);
-    border-radius: 8px;
+    border-radius: 6px;
     overflow: hidden;
   }
   .qty-btn {
-    width: 32px; height: 32px;
+    width: 28px; height: 28px;
     border: none;
     background: var(--surface2);
     color: var(--accent);
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s;
@@ -262,16 +271,16 @@
   }
   .qty-btn:hover { background: var(--accent-light); }
   .qty-display {
-    width: 36px;
+    width: 32px;
     text-align: center;
     font-family: 'DM Mono', monospace;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     border: none;
     border-left: 1.5px solid var(--border);
     border-right: 1.5px solid var(--border);
     padding: 0;
-    height: 32px;
+    height: 28px;
     color: var(--text);
     background: white;
   }
@@ -279,17 +288,17 @@
 
   .add-btn {
     width: 100%;
-    padding: 10px;
-    border-radius: 9px;
+    padding: 9px;
+    border-radius: 8px;
     border: none;
     background: var(--accent);
     color: white;
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.18s, transform 0.1s;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
+    display: flex; align-items: center; justify-content: center; gap: 4px;
   }
   .add-btn:hover { background: var(--accent2); }
   .add-btn:active { transform: scale(0.98); }
@@ -311,7 +320,7 @@
   .cart-panel {
     position: fixed;
     right: 0; top: 0; bottom: 0;
-    width: 420px;
+    width: 380px;
     max-width: 100vw;
     background: var(--surface);
     z-index: 201;
@@ -324,13 +333,13 @@
   .cart-panel.open { transform: translateX(0); }
 
   .cart-header {
-    padding: 24px 24px 16px;
+    padding: 20px 20px 14px;
     border-bottom: 1.5px solid var(--border);
     display: flex; align-items: center; justify-content: space-between;
   }
-  .cart-header h2 { font-size: 18px; font-weight: 700; }
+  .cart-header h2 { font-size: 16px; font-weight: 700; }
   .close-cart {
-    width: 34px; height: 34px;
+    width: 32px; height: 32px;
     border-radius: 8px;
     border: 1.5px solid var(--border);
     background: none;
@@ -345,58 +354,58 @@
   .cart-items {
     flex: 1;
     overflow-y: auto;
-    padding: 16px 24px;
+    padding: 14px 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
   .cart-empty {
     text-align: center;
-    padding: 60px 0;
+    padding: 40px 0;
     color: var(--text3);
   }
-  .cart-empty .empty-icon { font-size: 48px; margin-bottom: 12px; }
-  .cart-empty p { font-size: 14px; }
+  .cart-empty .empty-icon { font-size: 40px; margin-bottom: 10px; }
+  .cart-empty p { font-size: 13px; }
 
   .cart-item {
-    display: flex; align-items: flex-start; gap: 14px;
-    padding: 14px;
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px;
     background: var(--surface2);
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid var(--border);
   }
-  .cart-item-icon { font-size: 22px; flex-shrink: 0; }
+  .cart-item-icon { font-size: 20px; flex-shrink: 0; }
   .cart-item-info { flex: 1; }
-  .cart-item-name { font-size: 14px; font-weight: 600; }
-  .cart-item-qty { font-size: 12px; color: var(--text2); margin-top: 3px; }
+  .cart-item-name { font-size: 13px; font-weight: 600; }
+  .cart-item-qty { font-size: 11px; color: var(--text2); margin-top: 2px; }
   .cart-item-remove {
     background: none; border: none; cursor: pointer;
     color: var(--text3); font-size: 16px;
     transition: color 0.15s;
     flex-shrink: 0;
-    padding: 2px;
+    padding: 0;
   }
   .cart-item-remove:hover { color: var(--danger); }
 
   .cart-footer {
-    padding: 20px 24px;
+    padding: 16px 20px;
     border-top: 1.5px solid var(--border);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   .name-input-wrap label {
-    font-size: 13px; font-weight: 600; color: var(--text2);
-    display: block; margin-bottom: 6px;
+    font-size: 12px; font-weight: 600; color: var(--text2);
+    display: block; margin-bottom: 4px;
   }
   .name-input-wrap input {
     width: 100%;
-    padding: 11px 14px;
-    border-radius: 9px;
+    padding: 10px 12px;
+    border-radius: 8px;
     border: 1.5px solid var(--border);
     font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: var(--text);
     background: var(--surface);
     outline: none;
@@ -406,17 +415,17 @@
 
   .submit-btn {
     width: 100%;
-    padding: 14px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 9px;
     border: none;
     background: var(--accent);
     color: white;
     font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     cursor: pointer;
     transition: background 0.18s;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
   }
   .submit-btn:hover { background: var(--accent2); }
   .submit-btn:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; }
@@ -431,22 +440,22 @@
     justify-content: center;
     flex-direction: column;
     text-align: center;
-    padding: 40px;
-    gap: 16px;
+    padding: 30px 20px;
+    gap: 14px;
   }
   .success-screen.show { display: flex; }
-  .success-icon { font-size: 72px; }
-  .success-screen h2 { font-size: 26px; font-weight: 700; color: var(--accent); }
-  .success-screen p { color: var(--text2); font-size: 16px; max-width: 340px; line-height: 1.6; }
+  .success-icon { font-size: 60px; }
+  .success-screen h2 { font-size: 22px; font-weight: 700; color: var(--accent); }
+  .success-screen p { color: var(--text2); font-size: 14px; max-width: 300px; line-height: 1.5; }
   .success-back {
-    margin-top: 8px;
-    padding: 13px 28px;
+    margin-top: 6px;
+    padding: 11px 24px;
     background: var(--accent);
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 9px;
     font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
   }
@@ -454,7 +463,7 @@
 
   /* ORDER LOG */
   .orders-section {
-    margin-top: 40px;
+    margin-top: 30px;
   }
   .orders-table-wrap {
     overflow-x: auto;
@@ -466,18 +475,18 @@
   table { width: 100%; border-collapse: collapse; }
   th {
     background: var(--surface2);
-    padding: 12px 16px;
+    padding: 10px 12px;
     text-align: left;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--text2);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     text-transform: uppercase;
     border-bottom: 1.5px solid var(--border);
   }
   td {
-    padding: 13px 16px;
-    font-size: 13px;
+    padding: 11px 12px;
+    font-size: 12px;
     color: var(--text);
     border-bottom: 1px solid var(--border);
     vertical-align: middle;
@@ -486,23 +495,40 @@
   tr:hover td { background: var(--surface2); }
   .status-badge {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 3px 9px;
     border-radius: 20px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     background: #d4edda;
     color: #155724;
   }
-  .no-orders { text-align: center; padding: 30px; color: var(--text3); font-size: 14px; }
+  .no-orders { text-align: center; padding: 24px; color: var(--text3); font-size: 13px; }
 
-  @media (max-width: 600px) {
-    .header-inner { gap: 10px; }
+  @media (max-width: 768px) {
+    .header-inner { 
+      gap: 8px;
+      height: auto;
+      padding: 12px 0;
+    }
     .logo-sub { display: none; }
-    .products-grid { grid-template-columns: 1fr 1fr; }
+    .logo-text { font-size: 16px; }
+    .logo-icon { width: 32px; height: 32px; font-size: 18px; }
+    .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
     .cart-panel { width: 100vw; }
+    .cart-btn { font-size: 12px; padding: 8px 12px; }
+    .header-search { min-width: 140px; }
+    main { padding: 16px 12px 60px; }
   }
-  @media (max-width: 400px) {
-    .products-grid { grid-template-columns: 1fr; }
+
+  @media (max-width: 480px) {
+    .header-inner { flex-direction: column; align-items: stretch; }
+    .logo { width: 100%; }
+    .header-search { width: 100%; min-width: unset; order: 2; }
+    .cart-btn { width: 100%; order: 3; justify-content: center; }
+    .products-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+    .product-card { padding: 12px; }
+    .product-image { height: 100px; }
+    .product-name { font-size: 12px; }
   }
 </style>
 </head>
@@ -514,16 +540,15 @@
       <div class="logo-icon">🧹</div>
       <div>
         <div class="logo-text">AK Schoonmaak</div>
-        <div class="logo-sub">Bestelplatform materialen</div>
+        <div class="logo-sub">Bestelplatform</div>
       </div>
     </div>
     <div class="header-search">
       <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Zoek product…" oninput="filterProducts()">
+      <input type="text" id="searchInput" placeholder="Zoek product…" oninput="filterProducts()" autocomplete="off">
     </div>
     <button class="cart-btn" onclick="openCart()">
-      🛒 Bestelling
-      <span class="cart-count" id="cartCount">0</span>
+      🛒 <span class="cart-count" id="cartCount">0</span>
     </button>
   </div>
 </header>
@@ -531,16 +556,16 @@
 <main>
   <div class="categories" id="categories">
     <button class="cat-btn active" onclick="setCategory('all', this)">Alles</button>
-    <button class="cat-btn" onclick="setCategory('reinigers', this)">🧴 Reinigers</button>
-    <button class="cat-btn" onclick="setCategory('doeken', this)">🧻 Doeken & Sponzen</button>
-    <button class="cat-btn" onclick="setCategory('mops', this)">🫧 Mops & Vloer</button>
-    <button class="cat-btn" onclick="setCategory('gereedschap', this)">🪣 Gereedschap</button>
-    <button class="cat-btn" onclick="setCategory('veiligheid', this)">🦺 Veiligheid</button>
-    <button class="cat-btn" onclick="setCategory('afval', this)">🗑️ Afvalzakken</button>
-    <button class="cat-btn" onclick="setCategory('stelen', this)">🔧 Stelen & Accessoires</button>
+    <button class="cat-btn" onclick="setCategory('reinigers', this)">Reinigers</button>
+    <button class="cat-btn" onclick="setCategory('doeken', this)">Doeken</button>
+    <button class="cat-btn" onclick="setCategory('mops', this)">Mops</button>
+    <button class="cat-btn" onclick="setCategory('gereedschap', this)">Gereedschap</button>
+    <button class="cat-btn" onclick="setCategory('veiligheid', this)">Veiligheid</button>
+    <button class="cat-btn" onclick="setCategory('afval', this)">Afval</button>
+    <button class="cat-btn" onclick="setCategory('stelen', this)">Stelen</button>
   </div>
 
-  <div class="section-title" id="sectionTitle">Alle producten (36)</div>
+  <div class="section-title" id="sectionTitle">Alle producten (37)</div>
   <div class="products-grid" id="productsGrid"></div>
 
   <div class="orders-section" id="ordersSection">
@@ -569,22 +594,22 @@
 <!-- Cart Panel -->
 <div class="cart-panel" id="cartPanel">
   <div class="cart-header">
-    <h2>🛒 Uw bestelling</h2>
+    <h2>🛒 Bestelling</h2>
     <button class="close-cart" onclick="closeCart()">✕</button>
   </div>
   <div class="cart-items" id="cartItems">
     <div class="cart-empty">
       <div class="empty-icon">🧹</div>
-      <p>Voeg producten toe aan uw bestelling</p>
+      <p>Voeg producten toe</p>
     </div>
   </div>
   <div class="cart-footer">
     <div class="name-input-wrap">
       <label for="employeeName">Uw naam</label>
-      <input type="text" id="employeeName" placeholder="Bijv. Jan de Vries">
+      <input type="text" id="employeeName" placeholder="Jan de Vries">
     </div>
     <button class="submit-btn" id="submitBtn" onclick="submitOrder()" disabled>
-      ✅ Bestelling plaatsen
+      ✅ Plaatsen
     </button>
   </div>
 </div>
@@ -593,49 +618,49 @@
 <div class="success-screen" id="successScreen">
   <div class="success-icon">✅</div>
   <h2>Bestelling ontvangen!</h2>
-  <p id="successMsg">Uw bestelling is succesvol ingediend. De verantwoordelijke wordt op de hoogte gesteld.</p>
-  <button class="success-back" onclick="backToShop()">← Terug naar overzicht</button>
+  <p id="successMsg">Uw bestelling is ingediend.</p>
+  <button class="success-back" onclick="backToShop()">← Terug</button>
 </div>
 
 <script>
 const products = [
-  { id:1,  name:"Sanitairreiniger",           cat:"reinigers",    icon:"🚽", use:"Reinigen van sanitair oppervlaktes",          unit:"1L flessen",     how:"Verdunnen met water, rode doek",                  image:"Dia4.JPG" },
-  { id:2,  name:"Interieurreiniger",          cat:"reinigers",    icon:"🪟", use:"Reinigen van interieur oppervlaktes",         unit:"1L flessen",     how:"Verdunnen, blauwe doek",                          image:"Dia5.JPG" },
-  { id:3,  name:"Vloerreiniger",              cat:"reinigers",    icon:"🧽", use:"Reinigen van vloeren",                        unit:"1L flessen",     how:"Verdunnen, dweildoek",                            image:"Dia6.JPG" },
-  { id:4,  name:"Ontvetter",                  cat:"reinigers",    icon:"🫧", use:"Verwijderen van vet op deuren/gootsteen",     unit:"1L flessen",     how:"Verdunnen, spons of blauwe doek",                 image:"Dia7.JPG" },
-  { id:5,  name:"Vlekkenspray",               cat:"reinigers",    icon:"💦", use:"Verwijderen van wateroplosbare vlekken",      unit:"0,5L flessen",   how:"Op vlek sprayen → inwerken → spons",              image:"Dia8.JPG" },
-  { id:6,  name:"RVS reiniger",               cat:"reinigers",    icon:"✨", use:"Reinigen en beschermen van RVS oppervlakten", unit:"0,5L flessen",   how:"Sproeien en polijsten met doek",                  image:"Dia9.JPG" },
-  { id:7,  name:"Blauwe doek",                cat:"doeken",       icon:"🟦", use:"Interieurdoek",                               unit:"Per stuk",       how:"Nat gebruiken op interieur",                      image:"Dia10.JPG" },
-  { id:8,  name:"Rode doek",                  cat:"doeken",       icon:"🟥", use:"Sanitairdoek",                                unit:"Per stuk",       how:"Nat gebruiken op sanitair",                       image:"Dia11.JPG" },
-  { id:9,  name:"Sponzen",                    cat:"doeken",       icon:"🧽", use:"Handmatige reiniging",                        unit:"Per stuk",       how:"Nat maken + schrobben",                           image:"Dia12.JPG" },
-  { id:10, name:"Glasdoek",                   cat:"doeken",       icon:"🪟", use:"Glazen oppervlakken strepenvrij",             unit:"Per stuk",       how:"Droog gebruiken",                                 image:"Dia13.JPG" },
-  { id:11, name:"Vloermop (gladde oppervlaktes)", cat:"mops",     icon:"🧹", use:"Dweilen gladde vloeren",                      unit:"Per stuk",       how:"Monteren + nat maken + uitwringen",               image:"Dia14.JPG" },
-  { id:12, name:"Vloermop (ruwe oppervlaktes)",   cat:"mops",     icon:"🧹", use:"Dweilen ruwe vloeren",                        unit:"Per stuk",       how:"Monteren + nat maken + uitwringen",               image:"Dia15.JPG" },
-  { id:13, name:"Vloermop (extra ruwe oppervlaktes/werkplaatsen)", cat:"mops", icon:"🧹", use:"Voor werkplaatsen/opleveringen", unit:"Per stuk", how:"Monteren + nat maken + uitwringen", image:"Dia16.JPG" },
-  { id:14, name:"Wisdoeken",                  cat:"doeken",       icon:"🧻", use:"Wissen van stof/zand",                        unit:"Per stuk",       how:"Op wissteel zetten",                              image:"Dia17.JPG" },
-  { id:15, name:"Stofzuiger",                 cat:"gereedschap",  icon:"🌀", use:"Verwijderen van stof/vuil",                   unit:"Per stuk",       how:"Juiste zuigmond kiezen",                          image:"Dia18.JPG" },
-  { id:16, name:"Moppenwagen",                cat:"gereedschap",  icon:"🪣", use:"Dweilen met schoon/vuil water gescheiden",    unit:"Per stuk",       how:"Blauwe (sop) + rode (spoel) emmer",               image:"Dia19.JPG" },
-  { id:17, name:"Mini-duster",                cat:"gereedschap",  icon:"🪶", use:"Afstoffen van kleine oppervlakken",           unit:"Per stuk",       how:"In ronde beweging",                               image:"Dia20.JPG" },
-  { id:18, name:"Inwasser",                   cat:"gereedschap",  icon:"🪣", use:"Ramen natmaken en reinigen",                  unit:"Per stuk",       how:"Sop aanbrengen, boven→beneden",                   image:"Dia21.JPG" },
-  { id:19, name:"Trekker",                    cat:"gereedschap",  icon:"🔧", use:"Water van ramen afhalen",                     unit:"Per stuk",       how:"Boven→beneden trekken",                           image:"Dia22.JPG" },
-  { id:20, name:"Stoffer & blik",             cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                             unit:"Per stuk",       how:"Vuil bij elkaar vegen",                           image:"Dia23.JPG" },
-  { id:21, name:"Ragebol",                    cat:"gereedschap",  icon:"🕷️", use:"Spinrag/hoge plekken",                        unit:"Per stuk",       how:"Op steel zetten",                                 image:"Dia24.JPG" },
-  { id:22, name:"Bezem",                      cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                             unit:"Per stuk",       how:"Op steel zetten, droog vuil",                     image:"Dia25.JPG" },
-  { id:23, name:"Schoonmaakhandschoenen",     cat:"veiligheid",   icon:"🧤", use:"Beschermen tegen chemie & viezigheid",        unit:"Doos 200 stuks", how:"Aantrekken bij nat/chemisch werk",               image:"Dia26.JPG" },
-  { id:24, name:"Veiligheidsbril",            cat:"veiligheid",   icon:"🥽", use:"Bescherming tegen spatten",                   unit:"Per stuk",       how:"Opzetten bij chemie/machines",                    image:"Dia27.JPG" },
-  { id:25, name:"Afvalzak (80×110)",          cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 15 rollen", how:"In prullenbak plaatsen",                         image:"Dia28.JPG" },
-  { id:26, name:"Pedaalemmerzakken (58×100)", cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 50 rollen", how:"In pedaalemmer plaatsen",                     image:"Dia29.JPG" },
-  { id:27, name:"Afvalzak (58×100)",          cat:"afval",        icon:"🗑️", use:"Afval verzamelen",                            unit:"Doos 20 rollen", how:"In afvalemmer plaatsen",                      image:"Dia30.JPG" },
-  { id:28, name:"Afvalzak biologisch (GFT)",  cat:"afval",        icon:"♻️", use:"GFT afval verzamelen",                        unit:"Doos 24 rollen", how:"In GFT-emmer plaatsen",                       image:"Dia31.JPG" },
-  { id:29, name:"Aluminium steel",            cat:"stelen",       icon:"🔩", use:"Voor dweilonderstel",                         unit:"Per stuk",       how:"Oprollen, vastdraaien",                           image:"Dia32.JPG" },
-  { id:30, name:"Bezemsteel",                 cat:"stelen",       icon:"🔧", use:"Voor bezemkop",                               unit:"Per stuk",       how:"Vastdraaien",                                     image:"Dia33.JPG" },
-  { id:31, name:"Ergo-dweil",                 cat:"mops",         icon:"🦾", use:"Minder belasting pols/schouder",              unit:"Per stuk",       how:"Bovenste + middelste handvat, S-beweging",        image:"Dia34.JPG" },
-  { id:32, name:"Uitwringer",                 cat:"gereedschap",  icon:"💧", use:"Doeken uitwringen zonder kracht",             unit:"Per stuk",       how:"Op kar plaatsen, doek door wringer",              image:"Dia35.JPG" },
-  { id:33, name:"Steel stoffer & blik",       cat:"stelen",       icon:"🧹", use:"Staand vegen",                                unit:"Per stuk",       how:"Vuil in steel-blik vegen",                        image:"Dia36.JPG" },
-  { id:34, name:"Plumeau",                    cat:"gereedschap",  icon:"🪶", use:"Stof verwijderen zonder bukken",              unit:"Per stuk",       how:"Statisch maken → gebruiken",                      image:"Dia37.JPG" },
-  { id:35, name:"Mini telescoopsteel",        cat:"stelen",       icon:"📏", use:"Bereik vergroten",                            unit:"Per stuk",       how:"Doek bevestigen en gebruiken",                    image:"Dia38.JPG" },
-  { id:36, name:"Ergo gebogen bezemsteel",    cat:"stelen",       icon:"🔧", use:"Lichtere beweging bij vegen",                 unit:"Per stuk",       how:"Rechte rug, van je afvegen",                      image:"Dia39.JPG" },
-  { id:37, name:"Doodlebug",                  cat:"mops",         icon:"🪥", use:"Hardnekkige vloer-vlekken verwijderen",       unit:"Per stuk",       how:"Aan telescoopsteel, nat maken en schrobben",      image:"Dia40.JPG" }
+  { id:1,  name:"Sanitairreiniger",           cat:"reinigers",    icon:"🚽", use:"Sanitair oppervlaktes",          unit:"1L flessen",     how:"Verdunnen, rode doek",                 image:"Dia4.JPG" },
+  { id:2,  name:"Interieurreiniger",          cat:"reinigers",    icon:"🪟", use:"Interieur oppervlaktes",         unit:"1L flessen",     how:"Verdunnen, blauwe doek",               image:"Dia5.JPG" },
+  { id:3,  name:"Vloerreiniger",              cat:"reinigers",    icon:"🧽", use:"Vloeren",                        unit:"1L flessen",     how:"Verdunnen, dweildoek",                 image:"Dia6.JPG" },
+  { id:4,  name:"Ontvetter",                  cat:"reinigers",    icon:"🫧", use:"Vet op deuren/gootsteen",        unit:"1L flessen",     how:"Verdunnen, blauwe doek",               image:"Dia7.JPG" },
+  { id:5,  name:"Vlekkenspray",               cat:"reinigers",    icon:"💦", use:"Wateroplosbare vlekken",         unit:"0,5L flessen",   how:"Sprayen, inwerken, spons",             image:"Dia8.JPG" },
+  { id:6,  name:"RVS reiniger",               cat:"reinigers",    icon:"✨", use:"RVS oppervlakten",               unit:"0,5L flessen",   how:"Sproeien, polijsten",                  image:"Dia9.JPG" },
+  { id:7,  name:"Blauwe doek",                cat:"doeken",       icon:"🟦", use:"Interieur",                       unit:"Per stuk",       how:"Nat gebruiken",                        image:"Dia10.JPG" },
+  { id:8,  name:"Rode doek",                  cat:"doeken",       icon:"🟥", use:"Sanitair",                        unit:"Per stuk",       how:"Nat gebruiken",                        image:"Dia11.JPG" },
+  { id:9,  name:"Sponzen",                    cat:"doeken",       icon:"🧽", use:"Handmatige reiniging",           unit:"Per stuk",       how:"Nat maken, schrobben",                 image:"Dia12.JPG" },
+  { id:10, name:"Glasdoek",                   cat:"doeken",       icon:"🪟", use:"Glazen oppervlakken",            unit:"Per stuk",       how:"Droog gebruiken",                      image:"Dia13.JPG" },
+  { id:11, name:"Vloermop (glad)",            cat:"mops",         icon:"🧹", use:"Gladde vloeren",                  unit:"Per stuk",       how:"Monteren, nat, uitwringen",            image:"Dia14.JPG" },
+  { id:12, name:"Vloermop (ruw)",             cat:"mops",         icon:"🧹", use:"Ruwe vloeren",                    unit:"Per stuk",       how:"Monteren, nat, uitwringen",            image:"Dia15.JPG" },
+  { id:13, name:"Vloermop (extra ruw)",       cat:"mops",         icon:"🧹", use:"Werkplaatsen",                    unit:"Per stuk",       how:"Monteren, nat, uitwringen",            image:"Dia16.JPG" },
+  { id:14, name:"Wisdoeken",                  cat:"doeken",       icon:"🧻", use:"Stof/zand",                       unit:"Per stuk",       how:"Op wissteel",                          image:"Dia17.JPG" },
+  { id:15, name:"Stofzuiger",                 cat:"gereedschap",  icon:"🌀", use:"Stof/vuil",                       unit:"Per stuk",       how:"Zuigmond kiezen",                      image:"Dia18.JPG" },
+  { id:16, name:"Moppenwagen",                cat:"gereedschap",  icon:"🪣", use:"Schoon/vuil water",              unit:"Per stuk",       how:"Blauwe + rode emmer",                  image:"Dia19.JPG" },
+  { id:17, name:"Mini-duster",                cat:"gereedschap",  icon:"🪶", use:"Kleine oppervlakken",            unit:"Per stuk",       how:"In ronde beweging",                    image:"Dia20.JPG" },
+  { id:18, name:"Inwasser",                   cat:"gereedschap",  icon:"🪣", use:"Ramen natmaken",                 unit:"Per stuk",       how:"Sop aanbrengen",                       image:"Dia21.JPG" },
+  { id:19, name:"Trekker",                    cat:"gereedschap",  icon:"🔧", use:"Water van ramen",                 unit:"Per stuk",       how:"Trekken",                              image:"Dia22.JPG" },
+  { id:20, name:"Stoffer & blik",             cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                unit:"Per stuk",       how:"Vuil bij elkaar",                      image:"Dia23.JPG" },
+  { id:21, name:"Ragebol",                    cat:"gereedschap",  icon:"🕷️", use:"Spinrag/hoog",                   unit:"Per stuk",       how:"Op steel",                             image:"Dia24.JPG" },
+  { id:22, name:"Bezem",                      cat:"gereedschap",  icon:"🧹", use:"Handmatig vegen",                unit:"Per stuk",       how:"Op steel",                             image:"Dia25.JPG" },
+  { id:23, name:"Handschoenen",               cat:"veiligheid",   icon:"🧤", use:"Bescherming",                     unit:"Doos 200 stuks", how:"Bij nat werk",                         image:"Dia26.JPG" },
+  { id:24, name:"Veiligheidsbril",            cat:"veiligheid",   icon:"🥽", use:"Tegen spatten",                   unit:"Per stuk",       how:"Opzetten",                             image:"Dia27.JPG" },
+  { id:25, name:"Afvalzak 80×110",            cat:"afval",        icon:"🗑️", use:"Afval",                           unit:"Doos 15 rollen", how:"In prullenbak",                       image:"Dia28.JPG" },
+  { id:26, name:"Pedaalemmerzak 58×100",      cat:"afval",        icon:"🗑️", use:"Afval",                           unit:"Doos 50 rollen", how:"In pedaalemmer",                     image:"Dia29.JPG" },
+  { id:27, name:"Afvalzak 58×100",            cat:"afval",        icon:"🗑️", use:"Afval",                           unit:"Doos 20 rollen", how:"In emmer",                          image:"Dia30.JPG" },
+  { id:28, name:"Biologische afvalzak",       cat:"afval",        icon:"♻️", use:"GFT afval",                       unit:"Doos 24 rollen", how:"In GFT-emmer",                      image:"Dia31.JPG" },
+  { id:29, name:"Aluminium steel",            cat:"stelen",       icon:"🔩", use:"Dweilonderstel",                 unit:"Per stuk",       how:"Vastdraaien",                          image:"Dia32.JPG" },
+  { id:30, name:"Bezemsteel",                 cat:"stelen",       icon:"🔧", use:"Bezemkop",                        unit:"Per stuk",       how:"Vastdraaien",                          image:"Dia33.JPG" },
+  { id:31, name:"Ergo-dweil",                 cat:"mops",         icon:"🦾", use:"Minder belasting",                unit:"Per stuk",       how:"S-beweging",                           image:"Dia34.JPG" },
+  { id:32, name:"Uitwringer",                 cat:"gereedschap",  icon:"💧", use:"Doeken uitwringen",              unit:"Per stuk",       how:"Op kar",                               image:"Dia35.JPG" },
+  { id:33, name:"Steel stoffer & blik",       cat:"stelen",       icon:"🧹", use:"Staand vegen",                    unit:"Per stuk",       how:"Vuil in steel-blik",                   image:"Dia36.JPG" },
+  { id:34, name:"Plumeau",                    cat:"gereedschap",  icon:"🪶", use:"Stof verwijderen",               unit:"Per stuk",       how:"Statisch",                             image:"Dia37.JPG" },
+  { id:35, name:"Mini telescoopsteel",        cat:"stelen",       icon:"📏", use:"Bereik vergroten",               unit:"Per stuk",       how:"Doek bevestigen",                      image:"Dia38.JPG" },
+  { id:36, name:"Ergo gebogen bezemsteel",    cat:"stelen",       icon:"🔧", use:"Lichtere beweging",              unit:"Per stuk",       how:"Rechte rug",                           image:"Dia39.JPG" },
+  { id:37, name:"Doodlebug",                  cat:"mops",         icon:"🪥", use:"Hardnekkige vlekken",            unit:"Per stuk",       how:"Nat maken, schrobben",                 image:"Dia40.JPG" }
 ];
 
 let cart = {};
@@ -667,7 +692,7 @@ function renderProducts() {
       <div class="product-name">${p.name}</div>
       <div class="product-use">${p.use}</div>
       <div class="product-meta">
-        <span class="unit-badge">📦 ${p.unit}</span>
+        <span class="unit-badge">${p.unit}</span>
         <div class="qty-control">
           <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
           <input class="qty-display" type="number" id="qty-${p.id}" value="${qty}" min="0" max="99" oninput="setQty(${p.id}, this.value)">
@@ -675,13 +700,13 @@ function renderProducts() {
         </div>
       </div>
       <button class="add-btn ${qty>0?'added':''}" id="addbtn-${p.id}" onclick="addToCart(${p.id})">
-        ${qty>0 ? '✅ Toegevoegd (' + qty + ')' : '+ Toevoegen'}
+        ${qty>0 ? '✅ (' + qty + ')' : '+ Voeg toe'}
       </button>
     `;
     grid.appendChild(card);
   });
 
-  document.getElementById('sectionTitle').textContent =
+  document.getElementById('sectionTitle').textContent = 
     `${currentCategory === 'all' ? 'Alle producten' : currentCategory} (${visible})`;
 }
 
@@ -708,7 +733,7 @@ function updateAddBtn(id) {
   const btn = document.getElementById('addbtn-' + id);
   const qty = cart[id] || 0;
   if (btn) {
-    btn.textContent = qty > 0 ? `✅ Toegevoegd (${qty})` : '+ Toevoegen';
+    btn.textContent = qty > 0 ? `✅ (${qty})` : '+ Voeg toe';
     btn.className = 'add-btn' + (qty>0?' added':'');
   }
 }
@@ -755,7 +780,7 @@ function renderCartPanel() {
   const container = document.getElementById('cartItems');
   const ids = Object.keys(cart).filter(id => cart[id] > 0);
   if (ids.length === 0) {
-    container.innerHTML = `<div class="cart-empty"><div class="empty-icon">🧹</div><p>Voeg producten toe aan uw bestelling</p></div>`;
+    container.innerHTML = `<div class="cart-empty"><div class="empty-icon">🧹</div><p>Voeg producten toe</p></div>`;
   } else {
     container.innerHTML = ids.map(id => {
       const p = products.find(x => x.id == id);
@@ -802,13 +827,11 @@ function submitOrder() {
   localStorage.setItem('ak_orders', JSON.stringify(orders.slice(0, 50)));
 
   document.getElementById('successMsg').textContent =
-    `Beste ${name}, uw bestelling is ontvangen. De verantwoordelijke wordt op de hoogte gesteld.`;
+    `Beste ${name}, uw bestelling is ingediend.`;
   document.getElementById('successScreen').classList.add('show');
   closeCart();
 
-  // Reset
   cart = {};
-  Object.keys(cart).forEach(id => updateAddBtn(id));
   products.forEach(p => {
     const inp = document.getElementById('qty-' + p.id);
     if (inp) inp.value = 0;
@@ -831,9 +854,9 @@ function renderOrders() {
   }
   tbody.innerHTML = orders.slice(0, 10).map(o => `
     <tr>
-      <td><span style="font-family:DM Mono,monospace;font-size:12px">${o.time}</span></td>
-      <td><strong>${o.name}</strong></td>
-      <td style="max-width:300px;white-space:normal;line-height:1.4">${o.items}</td>
+      <td><span style="font-family:DM Mono,monospace;font-size:11px">${o.time}</span></td>
+      <td><strong style="font-size:12px">${o.name}</strong></td>
+      <td style="max-width:200px;white-space:normal;line-height:1.3;font-size:11px">${o.items}</td>
       <td><span class="status-badge">✅ ${o.status}</span></td>
     </tr>
   `).join('');

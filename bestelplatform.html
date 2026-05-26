@@ -141,22 +141,33 @@
     border-top: 1px solid rgba(255,255,255,0.1);
     font-size: 11px;
     color: rgba(255,255,255,0.9);
-    max-height: 60px;
+    max-height: 140px;
     overflow-y: auto;
   }
 
   .overview-title {
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     font-size: 10px;
     text-transform: uppercase;
     opacity: 0.8;
   }
 
+  .overview-section {
+    margin-bottom: 10px;
+  }
+
+  .overview-section-title {
+    font-size: 9px;
+    opacity: 0.7;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+  }
+
   .overview-items {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
   }
 
   .overview-item {
@@ -173,6 +184,25 @@
 
   .overview-item-qty {
     opacity: 0.8;
+  }
+
+  .overview-order {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 9px;
+    margin-bottom: 4px;
+  }
+
+  .overview-order-name {
+    font-weight: 600;
+    font-size: 10px;
+  }
+
+  .overview-order-items {
+    font-size: 9px;
+    opacity: 0.9;
+    margin-top: 2px;
   }
 
   /* MAIN */
@@ -501,48 +531,6 @@
     cursor: pointer;
   }
   .success-back:active { background: var(--accent2); }
-
-  /* ORDER LOG */
-  .orders-section {
-    margin-top: 20px;
-  }
-  .orders-table-wrap {
-    overflow-x: auto;
-    background: var(--surface);
-    border-radius: 10px;
-    border: 1.5px solid var(--border);
-    box-shadow: var(--shadow);
-  }
-  table { width: 100%; border-collapse: collapse; }
-  th {
-    background: var(--surface2);
-    padding: 8px 10px;
-    text-align: left;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text2);
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    border-bottom: 1.5px solid var(--border);
-  }
-  td {
-    padding: 9px 10px;
-    font-size: 11px;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-  }
-  tr:last-child td { border-bottom: none; }
-  .status-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-size: 9px;
-    font-weight: 600;
-    background: #d4edda;
-    color: #155724;
-  }
-  .no-orders { text-align: center; padding: 20px; color: var(--text3); font-size: 12px; }
 </style>
 </head>
 <body>
@@ -563,9 +551,18 @@
   </div>
 
   <div class="header-overview" id="headerOverview">
-    <div class="overview-title">Huidige bestelling</div>
-    <div class="overview-items" id="overviewItems">
-      <div style="opacity: 0.5; font-size: 10px;">Voeg producten toe</div>
+    <div class="overview-title">📋 Bestellingen & Selectie</div>
+    
+    <div class="overview-section" id="ordersOverviewSection">
+      <div class="overview-section-title">Ingediend</div>
+      <div id="ordersOverview"></div>
+    </div>
+    
+    <div class="overview-section" id="currentOrderSection">
+      <div class="overview-section-title">Huidge Selectie</div>
+      <div class="overview-items" id="overviewItems">
+        <div style="opacity: 0.5; font-size: 10px;">Voeg producten toe</div>
+      </div>
     </div>
   </div>
 </header>
@@ -584,24 +581,6 @@
 
   <div class="section-title" id="sectionTitle">Alle producten (37)</div>
   <div class="products-grid" id="productsGrid"></div>
-
-  <div class="orders-section" id="ordersSection">
-    <div class="section-title">Bestellingen</div>
-    <div class="orders-table-wrap">
-      <table id="ordersTable">
-        <thead>
-          <tr>
-            <th>Tijdstip</th>
-            <th>Naam</th>
-            <th>Producten</th>
-          </tr>
-        </thead>
-        <tbody id="ordersBody">
-          <tr><td colspan="3" class="no-orders">Nog geen bestellingen</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
 </main>
 
 <!-- Cart Overlay -->
@@ -772,6 +751,7 @@ function updateCartCount() {
 }
 
 function updateOverview() {
+  // Update current order
   const overview = document.getElementById('overviewItems');
   const ids = Object.keys(cart).filter(id => cart[id] > 0);
   
@@ -785,6 +765,23 @@ function updateOverview() {
         <span class="overview-item-qty">×${cart[id]}</span>
       </div>`;
     }).join('');
+  }
+
+  // Update orders
+  updateOrdersOverview();
+}
+
+function updateOrdersOverview() {
+  const ordersOverview = document.getElementById('ordersOverview');
+  if (orders.length === 0) {
+    ordersOverview.innerHTML = '<div style="opacity: 0.5; font-size: 10px;">Geen bestellingen</div>';
+  } else {
+    ordersOverview.innerHTML = orders.slice(0, 5).map(o => `
+      <div class="overview-order">
+        <div class="overview-order-name">${o.name}</div>
+        <div class="overview-order-items">${o.items.substring(0, 40)}${o.items.length > 40 ? '...' : ''}</div>
+      </div>
+    `).join('');
   }
 }
 
@@ -875,7 +872,6 @@ function submitOrder() {
   });
   updateCartCount();
   updateOverview();
-  renderOrders();
 }
 
 function backToShop() {
@@ -883,24 +879,9 @@ function backToShop() {
   renderProducts();
 }
 
-function renderOrders() {
-  const tbody = document.getElementById('ordersBody');
-  if (orders.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="3" class="no-orders">Nog geen bestellingen</td></tr>';
-    return;
-  }
-  tbody.innerHTML = orders.slice(0, 8).map(o => `
-    <tr>
-      <td><span style="font-family:DM Mono,monospace;font-size:10px">${o.time}</span></td>
-      <td><strong style="font-size:11px">${o.name}</strong></td>
-      <td style="max-width:150px;white-space:normal;line-height:1.2;font-size:10px">${o.items}</td>
-    </tr>
-  `).join('');
-}
-
 // Init
 renderProducts();
-renderOrders();
+updateOrdersOverview();
 updateCartCount();
 updateOverview();
 </script>

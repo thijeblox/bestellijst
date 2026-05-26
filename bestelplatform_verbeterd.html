@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>AK Schoonmaak – Bestelplatform</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f2f0;
+    --surface: #ffffff;
+    --surface2: #f7f9f7;
+    --border: #e2e6e2;
+    --accent: #1a6e3c;
+    --accent-light: #e8f5ee;
+    --accent2: #2d9e5f;
+    --text: #1a1f1a;
+    --text2: #4a584a;
+    --text3: #7a8a7a;
+    --danger: #c0392b;
+    --shadow: 0 2px 12px rgba(26,110,60,0.08);
+    --shadow-lg: 0 8px 32px rgba(26,110,60,0.14);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; overflow-x: hidden; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* PASSWORD SCREEN */
+  .password-screen {
+    position: fixed; inset: 0;
+    background: var(--accent);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+  }
+  .password-screen.hidden { display: none; }
+  .pw-logo { font-size: 48px; }
+  .pw-title { color: white; font-size: 20px; font-weight: 700; }
+  .pw-subtitle { color: rgba(255,255,255,0.7); font-size: 13px; }
+  .pw-input-wrap { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 260px; }
+  .pw-input {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 6px;
+    outline: none;
+    width: 100%;
+  }
+  .pw-input::placeholder { color: rgba(255,255,255,0.4); letter-spacing: 2px; font-size: 14px; font-weight: 400; }
+  .pw-input:focus { border-color: rgba(255,255,255,0.8); }
+  .pw-btn {
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: white;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .pw-btn:active { background: var(--accent-light); }
+  .pw-error { color: #ffcccc; font-size: 12px; text-align: center; display: none; }
+  .pw-error.show { display: block; }
+
+  /* HEADER */
+  header {
+    background: var(--accent);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(26,110,60,0.25);
+    width: 100%;
+  }
+
+  .header-top {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .logo-text { font-size: 14px; font-weight: 700; letter-spacing: -0.3px; }
+
+  .header-search {
+    flex: 1; min-width: 100px; max-width: 200px; position: relative;
+  }
+  .header-search input {
+    width: 100%;
+    padding: 8px 12px 8px 32px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .header-search input::placeholder { color: rgba(255,255,255,0.6); }
+  .header-search input:focus { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.25); }
+  .search-icon { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: 0.7; pointer-events: none; }
+
+  .header-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+  .cart-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 4px;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .cart-btn:hover { background: rgba(255,255,255,0.25); }
+  .cart-count {
+    background: #f0c040;
+    color: #1a1a00;
+    border-radius: 20px;
+    padding: 0 5px;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  /* TOGGLE BUTTON voor overzichtsbalk */
+  .overview-toggle-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+    line-height: 1;
+  }
+  .overview-toggle-btn:hover { background: rgba(255,255,255,0.25); }
+
+  /* OVERVIEW BAR */
+  .header-overview {
+    background: rgba(0,0,0,0.12);
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 11px;
+    color: rgba(255,255,255,0.9);
+    overflow: hidden;
+    max-height: 300px;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+  .header-overview.collapsed {
+    max-height: 0;
+  }
+
+  .overview-orders-block {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .overview-orders-block-title {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; opacity: 0.75; margin-bottom: 5px;
+  }
+  .orders-list {
+    display: flex; flex-direction: column; gap: 3px;
+    max-height: 90px; overflow-y: auto;
+  }
+  .overview-order {
+    display: flex; align-items: baseline; gap: 6px;
+    background: rgba(255,255,255,0.12);
+    padding: 4px 8px; border-radius: 6px; font-size: 10px;
+    position: relative;
+  }
+  .overview-order-name { font-weight: 700; white-space: nowrap; flex-shrink: 0; }
+  .overview-order-dot { opacity: 0.4; flex-shrink: 0; }
+  .overview-order-items { opacity: 0.85; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+  .overview-order-time { font-size: 9px; opacity: 0.5; flex-shrink: 0; }
+  .cancel-btn {
+    background: rgba(255,80,80,0.25);
+    border: 1px solid rgba(255,100,100,0.4);
+    color: white;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 9px;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .cancel-btn:hover { background: rgba(255,80,80,0.45); }
+  .cancelled-label {
+    font-size: 9px;
+    opacity: 0.5;
+    text-decoration: line-through;
+    flex-shrink: 0;
+  }
+
+  .overview-selection-block { padding: 7px 12px; }
+  .overview-selection-title {
+    font-size: 9px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; opacity: 0.75; margin-bottom: 5px;
+  }
+  .overview-items { display: flex; flex-wrap: wrap; gap: 5px; }
+  .overview-item {
+    background: rgba(255,255,255,0.18);
+    padding: 3px 8px; border-radius: 6px; font-size: 10px;
+    white-space: nowrap; display: flex; align-items: center; gap: 4px;
+  }
+  .overview-item-name { font-weight: 600; }
+  .overview-item-qty { opacity: 0.75; font-size: 9px; }
+  .no-items-hint { opacity: 0.45; font-size: 10px; font-style: italic; }
+
+  /* MAIN */
+  main { max-width: 100%; margin: 0 auto; padding: 12px; width: 100%; }
+
+  .categories { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .cat-btn {
+    padding: 6px 12px; border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text2);
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+    cursor: pointer; transition: all 0.18s; white-space: nowrap;
+  }
+  .cat-btn:hover { border-color: var(--accent2); color: var(--accent); }
+  .cat-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+  .section-title {
+    font-size: 11px; font-weight: 600; color: var(--text3);
+    letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .product-card {
+    background: var(--surface); border-radius: 10px;
+    border: 1.5px solid var(--border); padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+  }
+  .product-card:hover { box-shadow: var(--shadow-lg); border-color: #c5d9c5; transform: translateY(-2px); }
+
+  .product-image {
+    width: 100%; height: 110px;
+    background: var(--surface2); border-radius: 8px;
+    overflow: hidden; display: flex; align-items: center; justify-content: center;
+  }
+  .product-image img { width: 100%; height: 100%; object-fit: cover; }
+
+  .product-nr {
+    font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text3);
+    background: var(--surface2); display: inline-block;
+    padding: 2px 6px; border-radius: 4px; width: fit-content;
+  }
+  .product-name { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .product-use { font-size: 10px; color: var(--text2); line-height: 1.3; flex: 1; }
+
+  .product-meta { display: flex; align-items: center; justify-content: space-between; gap: 4px; flex-wrap: wrap; }
+  .unit-badge {
+    font-size: 9px; background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 6px; color: var(--text2); font-weight: 500;
+  }
+
+  .qty-control { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .qty-btn {
+    width: 24px; height: 24px; border: none; background: var(--surface2);
+    color: var(--accent); font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: background 0.15s; display: flex; align-items: center; justify-content: center;
+  }
+  .qty-btn:active { background: var(--accent-light); }
+  .qty-display {
+    width: 28px; text-align: center; font-family: 'DM Mono', monospace;
+    font-size: 11px; font-weight: 600; border: none;
+    border-left: 1.5px solid var(--border); border-right: 1.5px solid var(--border);
+    padding: 0; height: 24px; color: var(--text); background: white;
+  }
+  .qty-display:focus { outline: none; }
+
+  .add-btn {
+    width: 100%; padding: 8px; border-radius: 7px; border: none;
+    background: var(--accent); color: white;
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
+    cursor: pointer; transition: background 0.18s, transform 0.1s;
+  }
+  .add-btn:active { transform: scale(0.98); }
+  .add-btn.added { background: #2e7d32; }
+  .product-card.hidden { display: none; }
+
+  /* CART PANEL */
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 200; display: none; opacity: 0; transition: opacity 0.25s;
+  }
+  .cart-overlay.open { display: block; opacity: 1; }
+
+  .cart-panel {
+    position: fixed; right: 0; top: 0; bottom: 0;
+    width: 100%; max-width: 360px;
+    background: var(--surface); z-index: 201;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.18);
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .cart-panel.open { transform: translateX(0); }
+
+  .cart-header {
+    padding: 16px; border-bottom: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-header h2 { font-size: 14px; font-weight: 700; }
+  .close-cart {
+    width: 30px; height: 30px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: none; cursor: pointer;
+    font-size: 18px; color: var(--text2); transition: background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .close-cart:active { background: var(--surface2); }
+
+  .cart-items {
+    flex: 1; overflow-y: auto; padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .cart-empty { text-align: center; padding: 30px 0; color: var(--text3); }
+  .cart-empty .empty-icon { font-size: 36px; margin-bottom: 8px; }
+  .cart-empty p { font-size: 12px; }
+
+  .cart-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 10px; background: var(--surface2);
+    border-radius: 8px; border: 1px solid var(--border);
+  }
+  .cart-item-icon { font-size: 18px; flex-shrink: 0; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 12px; font-weight: 600; }
+  .cart-item-qty { font-size: 10px; color: var(--text2); margin-top: 2px; }
+  .cart-item-remove {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); font-size: 16px; transition: color 0.15s; flex-shrink: 0;
+  }
+  .cart-item-remove:active { color: var(--danger); }
+
+  .cart-footer {
+    padding: 14px; border-top: 1.5px solid var(--border);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .name-input-wrap label { font-size: 11px; font-weight: 600; color: var(--text2); display: block; margin-bottom: 4px; }
+  .name-input-wrap input {
+    width: 100%; padding: 9px 11px; border-radius: 8px;
+    border: 1.5px solid var(--border); font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--text); background: var(--surface); outline: none;
+  }
+  .name-input-wrap input:focus { border-color: var(--accent); }
+
+  .submit-btn {
+    width: 100%; padding: 11px; border-radius: 9px; border: none;
+    background: var(--accent); color: white;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: background 0.18s;
+  }
+  .submit-btn:active { background: var(--accent2); }
+  .submit-btn:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; }
+
+  /* SUCCESS */
+  .success-screen {
+    display: none; position: fixed; inset: 0; background: white;
+    z-index: 300; align-items: center; justify-content: center;
+    flex-direction: column; text-align: center; padding: 24px; gap: 12px;
+  }
+  .success-screen.show { display: flex; }
+  .success-icon { font-size: 52px; }
+  .success-screen h2 { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .success-screen p { color: var(--text2); font-size: 13px; line-height: 1.5; }
+  .success-back {
+    margin-top: 4px; padding: 10px 20px; background: var(--accent);
+    color: white; border: none; border-radius: 8px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer;
+  }
+  .success-back:active { background: var(--accent2); }
+
+  .cancel-timer {
+    font-size: 12px; color: var(--text3); margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- WACHTWOORD SCHERM -->
+<div class="password-screen" id="passwordScreen">
+  <div class="pw-logo">🧹</div>
+  <div class="pw-title">AK Schoonmaak</div>
+  <div class="pw-subtitle">Voer het wachtwoord in om verder te gaan</div>
+  <div class="pw-input-wrap">
+    <input class="pw-input" type="password" id="pwInput" placeholder="····" maxlength="10" onkeydown="if(event.key==='Enter') checkPassword()">
+    <button class="pw-btn" onclick="checkPassword()">Toegang →</button>
+    <div class="pw-error" id="pwError">Verkeerd wachtwoord, probeer opnieuw.</div>
+  </div>
+</div>
+
+<header>
+  <div class="header-top">
+    <div class="logo">
+      <div class="logo-icon">🧹</div>
+      <div class="logo-text">AK</div>
+    </div>
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Zoek…" oninput="filterProducts()" autocomplete="off">
+    </div>
+    <div class="header-right">
+      <button class="overview-toggle-btn" onclick="toggleOverview()" id="overviewToggleBtn" title="Overzicht tonen/verbergen">▾</button>
+      <button class="cart-btn" onclick="openCart()">
+        🛒 <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="header-overview" id="headerOverview">
+    <div class="overview-orders-block">
+      <div class="overview-orders-block-title">📋 Ingediende bestellingen</div>
+      <div class="orders-list" id="ordersOverview">
+        <span class="no-items-hint">Geen bestellingen ingediend</span>
+      </div>
+    </div>
+    <div class="overview-selection-block">
+      <div class="overview-selection-title">🛒 Huidige selectie</div>
+      <div class="overview-items" id="overviewItems">
+        <span class="no-items-hint">Voeg producten toe</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="categories" id="categories">
+    <button class="cat-btn active" onclick="setCategory('all', this)">Alles</button>
+    <button class="cat-btn" onclick="setCategory('reinigers', this)">Reinigers</button>
+    <button class="cat-btn" onclick="setCategory('doeken', this)">Doeken</button>
+    <button class="cat-btn" onclick="setCategory('mops', this)">Mops</button>
+    <button class="cat-btn" onclick="setCategory('gereedschap', this)">Gereedschap</button>
+    <button class="cat-btn" onclick="setCategory('veiligheid', this)">Veiligheid</button>
+    <button class="cat-btn" onclick="setCategory('afval', this)">Afval</button>
+    <button class="cat-btn" onclick="setCategory('stelen', this)">Stelen</button>
+  </div>
+  <div class="section-title" id="sectionTitle">Alle producten (37)</div>
+  <div class="products-grid" id="productsGrid"></div>
+</main>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>🛒 Bestelling</h2>
+    <button class="close-cart" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><div class="empty-icon">🧹</div><p>Voeg producten toe</p></div>
+  </div>
+  <div class="cart-footer">
+    <div class="name-input-wrap">
+      <label for="employeeName">Uw naam</label>
+      <input type="text" id="employeeName" placeholder="Jan de Vries">
+    </div>
+    <button class="submit-btn" id="submitBtn" onclick="submitOrder()" disabled>✅ Plaatsen</button>
+  </div>
+</div>
+
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✅</div>
+  <h2>Bestelling ontvangen!</h2>
+  <p id="successMsg">Uw bestelling is ingediend.</p>
+  <p class="cancel-timer" id="cancelTimerMsg"></p>
+  <button class="success-back" onclick="backToShop()">← Terug</button>
+</div>
+
+<script>
+const CANCEL_MINUTES = 15;
+const PASSWORD = '0546';
+
+const products = [
+  { id:1,  name:"Sanitairreiniger",        cat:"reinigers",   icon:"🚽", use:"Sanitair",     unit:"1L",   image:"Dia4.JPG" },
+  { id:2,  name:"Interieurreiniger",       cat:"reinigers",   icon:"🪟", use:"Interieur",    unit:"1L",   image:"Dia5.JPG" },
+  { id:3,  name:"Vloerreiniger",           cat:"reinigers",   icon:"🧽", use:"Vloeren",      unit:"1L",   image:"Dia6.JPG" },
+  { id:4,  name:"Ontvetter",               cat:"reinigers",   icon:"🫧", use:"Vet",          unit:"1L",   image:"Dia7.JPG" },
+  { id:5,  name:"Vlekkenspray",            cat:"reinigers",   icon:"💦", use:"Vlekken",      unit:"0,5L", image:"Dia8.JPG" },
+  { id:6,  name:"RVS reiniger",            cat:"reinigers",   icon:"✨", use:"RVS",          unit:"0,5L", image:"Dia9.JPG" },
+  { id:7,  name:"Blauwe doek",             cat:"doeken",      icon:"🟦", use:"Interieur",    unit:"Stuk", image:"Dia10.JPG" },
+  { id:8,  name:"Rode doek",               cat:"doeken",      icon:"🟥", use:"Sanitair",     unit:"Stuk", image:"Dia11.JPG" },
+  { id:9,  name:"Sponzen",                 cat:"doeken",      icon:"🧽", use:"Reiniging",    unit:"Stuk", image:"Dia12.JPG" },
+  { id:10, name:"Glasdoek",                cat:"doeken",      icon:"🪟", use:"Glas",         unit:"Stuk", image:"Dia13.JPG" },
+  { id:11, name:"Vloermop (glad)",         cat:"mops",        icon:"🧹", use:"Glad",         unit:"Stuk", image:"Dia14.JPG" },
+  { id:12, name:"Vloermop (ruw)",          cat:"mops",        icon:"🧹", use:"Ruw",          unit:"Stuk", image:"Dia15.JPG" },
+  { id:13, name:"Vloermop (extra ruw)",    cat:"mops",        icon:"🧹", use:"Extra ruw",    unit:"Stuk", image:"Dia16.JPG" },
+  { id:14, name:"Wisdoeken",               cat:"doeken",      icon:"🧻", use:"Stof/zand",    unit:"Stuk", image:"Dia17.JPG" },
+  { id:15, name:"Stofzuiger",              cat:"gereedschap", icon:"🌀", use:"Vuil",         unit:"Stuk", image:"Dia18.JPG" },
+  { id:16, name:"Moppenwagen",             cat:"gereedschap", icon:"🪣", use:"Water",        unit:"Stuk", image:"Dia19.JPG" },
+  { id:17, name:"Mini-duster",             cat:"gereedschap", icon:"🪶", use:"Klein",        unit:"Stuk", image:"Dia20.JPG" },
+  { id:18, name:"Inwasser",               cat:"gereedschap", icon:"🪣", use:"Ramen",        unit:"Stuk", image:"Dia21.JPG" },
+  { id:19, name:"Trekker",                 cat:"gereedschap", icon:"🔧", use:"Water",        unit:"Stuk", image:"Dia22.JPG" },
+  { id:20, name:"Stoffer & blik",          cat:"gereedschap", icon:"🧹", use:"Vegen",        unit:"Stuk", image:"Dia23.JPG" },
+  { id:21, name:"Ragebol",                 cat:"gereedschap", icon:"🕷️", use:"Spinrag",      unit:"Stuk", image:"Dia24.JPG" },
+  { id:22, name:"Bezem",                   cat:"gereedschap", icon:"🧹", use:"Vegen",        unit:"Stuk", image:"Dia25.JPG" },
+  { id:23, name:"Handschoenen",            cat:"veiligheid",  icon:"🧤", use:"Bescherming",  unit:"Doos", image:"Dia26.JPG" },
+  { id:24, name:"Veiligheidsbril",         cat:"veiligheid",  icon:"🥽", use:"Ogen",         unit:"Stuk", image:"Dia27.JPG" },
+  { id:25, name:"Afvalzak 80×110",         cat:"afval",       icon:"🗑️", use:"Afval",        unit:"Doos", image:"Dia28.JPG" },
+  { id:26, name:"Pedaalemmerzak 58×100",   cat:"afval",       icon:"🗑️", use:"Afval",        unit:"Doos", image:"Dia29.JPG" },
+  { id:27, name:"Afvalzak 58×100",         cat:"afval",       icon:"🗑️", use:"Afval",        unit:"Doos", image:"Dia30.JPG" },
+  { id:28, name:"Biologische afvalzak",    cat:"afval",       icon:"♻️", use:"GFT",          unit:"Doos", image:"Dia31.JPG" },
+  { id:29, name:"Aluminium steel",         cat:"stelen",      icon:"🔩", use:"Dweil",        unit:"Stuk", image:"Dia32.JPG" },
+  { id:30, name:"Bezemsteel",              cat:"stelen",      icon:"🔧", use:"Bezem",        unit:"Stuk", image:"Dia33.JPG" },
+  { id:31, name:"Ergo-dweil",              cat:"mops",        icon:"🦾", use:"Ergonomisch",  unit:"Stuk", image:"Dia34.JPG" },
+  { id:32, name:"Uitwringer",              cat:"gereedschap", icon:"💧", use:"Doeken",       unit:"Stuk", image:"Dia35.JPG" },
+  { id:33, name:"Steel stoffer & blik",    cat:"stelen",      icon:"🧹", use:"Vegen",        unit:"Stuk", image:"Dia36.JPG" },
+  { id:34, name:"Plumeau",                 cat:"gereedschap", icon:"🪶", use:"Stof",         unit:"Stuk", image:"Dia37.JPG" },
+  { id:35, name:"Mini telescoopsteel",     cat:"stelen",      icon:"📏", use:"Bereik",       unit:"Stuk", image:"Dia38.JPG" },
+  { id:36, name:"Ergo gebogen bezemsteel", cat:"stelen",      icon:"🔧", use:"Bezem",        unit:"Stuk", image:"Dia39.JPG" },
+  { id:37, name:"Doodlebug",              cat:"mops",        icon:"🪥", use:"Vlekken",      unit:"Stuk", image:"Dia40.JPG" }
+];
+
+let cart = {};
+let currentCategory = 'all';
+let currentSearch = '';
+let orders = JSON.parse(localStorage.getItem('ak_orders') || '[]');
+let overviewOpen = true;
+
+// --- WACHTWOORD ---
+function checkPassword() {
+  const val = document.getElementById('pwInput').value;
+  const err = document.getElementById('pwError');
+  if (val === PASSWORD) {
+    document.getElementById('passwordScreen').classList.add('hidden');
+    sessionStorage.setItem('ak_auth', '1');
+  } else {
+    err.classList.add('show');
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function initAuth() {
+  if (sessionStorage.getItem('ak_auth') === '1') {
+    document.getElementById('passwordScreen').classList.add('hidden');
+  } else {
+    document.getElementById('pwInput').focus();
+  }
+}
+
+// --- HEADER TOGGLE ---
+function toggleOverview() {
+  overviewOpen = !overviewOpen;
+  const bar = document.getElementById('headerOverview');
+  const btn = document.getElementById('overviewToggleBtn');
+  bar.classList.toggle('collapsed', !overviewOpen);
+  btn.textContent = overviewOpen ? '▾' : '▸';
+}
+
+// --- PRODUCTEN ---
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  let visible = 0;
+  products.forEach(p => {
+    const matchCat = currentCategory === 'all' || p.cat === currentCategory;
+    const matchSearch = p.name.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                        p.use.toLowerCase().includes(currentSearch.toLowerCase());
+    const show = matchCat && matchSearch;
+    if (show) visible++;
+    const qty = cart[p.id] || 0;
+    const card = document.createElement('div');
+    card.className = 'product-card' + (show ? '' : ' hidden');
+    card.id = 'card-' + p.id;
+    card.innerHTML = `
+      <div class="product-image">
+        <img src="${p.image}" alt="${p.name}" onerror="this.style.display='none'">
+      </div>
+      <div class="product-nr">Nr. ${p.id}</div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-use">${p.use}</div>
+      <div class="product-meta">
+        <span class="unit-badge">${p.unit}</span>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(${p.id}, -1)">−</button>
+          <input class="qty-display" type="number" id="qty-${p.id}" value="${qty}" min="0" max="99" oninput="setQty(${p.id}, this.value)">
+          <button class="qty-btn" onclick="changeQty(${p.id}, 1)">+</button>
+        </div>
+      </div>
+      <button class="add-btn ${qty>0?'added':''}" id="addbtn-${p.id}" onclick="addToCart(${p.id})">
+        ${qty>0 ? '✅ (' + qty + ')' : '+ Voeg'}
+      </button>
+    `;
+    grid.appendChild(card);
+  });
+  document.getElementById('sectionTitle').textContent =
+    `${currentCategory === 'all' ? 'Alle' : currentCategory} (${visible})`;
+}
+
+function changeQty(id, delta) {
+  const input = document.getElementById('qty-' + id);
+  const newVal = Math.max(0, Math.min(99, (parseInt(input.value)||0) + delta));
+  input.value = newVal;
+  setQty(id, newVal);
+}
+
+function setQty(id, val) {
+  const n = Math.max(0, Math.min(99, parseInt(val)||0));
+  document.getElementById('qty-' + id).value = n;
+  if (n > 0) { cart[id] = n; } else { delete cart[id]; }
+  updateAddBtn(id);
+  updateCartCount();
+  updateOverview();
+}
+
+function updateAddBtn(id) {
+  const btn = document.getElementById('addbtn-' + id);
+  const qty = cart[id] || 0;
+  if (btn) {
+    btn.textContent = qty > 0 ? `✅ (${qty})` : '+ Voeg';
+    btn.className = 'add-btn' + (qty>0?' added':'');
+  }
+}
+
+function addToCart(id) {
+  const input = document.getElementById('qty-' + id);
+  let n = parseInt(input.value) || 0;
+  if (n === 0) { n = 1; input.value = 1; }
+  cart[id] = n;
+  updateAddBtn(id);
+  updateCartCount();
+  updateOverview();
+}
+
+function updateCartCount() {
+  const total = Object.values(cart).reduce((s,v) => s+v, 0);
+  document.getElementById('cartCount').textContent = total;
+  document.getElementById('submitBtn').disabled = total === 0 || !document.getElementById('employeeName').value.trim();
+}
+
+// --- OVERZICHT ---
+function updateOverview() {
+  const overview = document.getElementById('overviewItems');
+  const ids = Object.keys(cart).filter(id => cart[id] > 0);
+  if (ids.length === 0) {
+    overview.innerHTML = '<span class="no-items-hint">Voeg producten toe</span>';
+  } else {
+    overview.innerHTML = ids.map(id => {
+      const p = products.find(x => x.id == id);
+      return `<div class="overview-item">
+        <span class="overview-item-name">${p.name}</span>
+        <span class="overview-item-qty">×${cart[id]}</span>
+      </div>`;
+    }).join('');
+  }
+  updateOrdersOverview();
+}
+
+function canCancel(order) {
+  if (order.cancelled) return false;
+  const elapsed = (Date.now() - order.timestamp) / 1000 / 60;
+  return elapsed < CANCEL_MINUTES;
+}
+
+function cancelOrder(index) {
+  orders[index].cancelled = true;
+  localStorage.setItem('ak_orders', JSON.stringify(orders));
+  updateOrdersOverview();
+}
+
+function updateOrdersOverview() {
+  const el = document.getElementById('ordersOverview');
+  if (orders.length === 0) {
+    el.innerHTML = '<span class="no-items-hint">Geen bestellingen ingediend</span>';
+    return;
+  }
+  el.innerHTML = orders.slice(0, 5).map((o, i) => {
+    const cancellable = canCancel(o);
+    const cancelBtn = cancellable
+      ? `<button class="cancel-btn" onclick="cancelOrder(${i})">Annuleren</button>`
+      : '';
+    const nameStyle = o.cancelled ? 'text-decoration:line-through; opacity:0.5;' : '';
+    return `<div class="overview-order">
+      <span class="overview-order-name" style="${nameStyle}">${o.name}</span>
+      <span class="overview-order-dot">·</span>
+      <span class="overview-order-items" style="${o.cancelled ? 'opacity:0.4;' : ''}">${o.items}</span>
+      <span class="overview-order-time">${o.time}</span>
+      ${o.cancelled ? '<span style="font-size:9px;opacity:0.5;flex-shrink:0;">geannuleerd</span>' : cancelBtn}
+    </div>`;
+  }).join('');
+}
+
+function setCategory(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts();
+}
+
+function filterProducts() {
+  currentSearch = document.getElementById('searchInput').value;
+  renderProducts();
+}
+
+// --- WINKELWAGEN ---
+function openCart() {
+  renderCartPanel();
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartPanel').classList.add('open');
+}
+
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartPanel').classList.remove('open');
+}
+
+function renderCartPanel() {
+  const container = document.getElementById('cartItems');
+  const ids = Object.keys(cart).filter(id => cart[id] > 0);
+  if (ids.length === 0) {
+    container.innerHTML = `<div class="cart-empty"><div class="empty-icon">🧹</div><p>Voeg producten toe</p></div>`;
+  } else {
+    container.innerHTML = ids.map(id => {
+      const p = products.find(x => x.id == id);
+      return `<div class="cart-item">
+        <div class="cart-item-icon">${p.icon}</div>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${p.name}</div>
+          <div class="cart-item-qty">${cart[id]}× ${p.unit}</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${id})">✕</button>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('employeeName').oninput = updateCartCount;
+}
+
+function removeFromCart(id) {
+  delete cart[id];
+  const inp = document.getElementById('qty-' + id);
+  if (inp) inp.value = 0;
+  updateAddBtn(id);
+  updateCartCount();
+  updateOverview();
+  renderCartPanel();
+}
+
+function submitOrder() {
+  const name = document.getElementById('employeeName').value.trim();
+  if (!name) { alert('Vul uw naam in.'); return; }
+  const ids = Object.keys(cart).filter(id => cart[id] > 0);
+  if (ids.length === 0) return;
+
+  const items = ids.map(id => {
+    const p = products.find(x => x.id == id);
+    return `${p.name} ×${cart[id]}`;
+  }).join(', ');
+
+  const order = {
+    timestamp: Date.now(),
+    time: new Date().toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }),
+    name, items,
+    cancelled: false
+  };
+  orders.unshift(order);
+  localStorage.setItem('ak_orders', JSON.stringify(orders.slice(0, 50)));
+
+  document.getElementById('successMsg').textContent = `Beste ${name}, uw bestelling is ingediend.`;
+  document.getElementById('cancelTimerMsg').textContent = `U kunt deze bestelling nog ${CANCEL_MINUTES} minuten annuleren via het overzicht.`;
+  document.getElementById('successScreen').classList.add('show');
+  closeCart();
+
+  cart = {};
+  products.forEach(p => {
+    const inp = document.getElementById('qty-' + p.id);
+    if (inp) inp.value = 0;
+    updateAddBtn(p.id);
+  });
+  updateCartCount();
+  updateOverview();
+}
+
+function backToShop() {
+  document.getElementById('successScreen').classList.remove('show');
+  renderProducts();
+}
+
+// Ververs annuleer-knoppen elke minuut
+setInterval(updateOrdersOverview, 60000);
+
+// Init
+initAuth();
+renderProducts();
+updateOrdersOverview();
+updateCartCount();
+updateOverview();
+</script>
+</body>
+</html>
